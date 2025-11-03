@@ -1,3 +1,5 @@
+import {Link} from "react-router";
+
 export default function TaskDetail({ task }) {
     if (!task) {
         return <div>Task not found</div>
@@ -5,20 +7,13 @@ export default function TaskDetail({ task }) {
 
     return (
         <>
-            <h1 className={"title"}>Détail de la tâche</h1>
-
-            <article className={"article"}>
-                <div className="flex flex-col">
-                    <h2>{task.title}</h2>
-                    <p className="text-sm text-gray-500">Date limite : {new Date(task.dueDate).toLocaleDateString('fr-FR', {day: '2-digit', month: '2-digit', year: 'numeric'})}</p>
-                </div>
-            </article>
+            <h1 className={"title"}>Détail de la tâche : {task.title}</h1>
 
             <div className="flex flex-row gap-4">
-                <article className={`article-state flex-1 ${new Date(task.dueDate) < new Date() ? 'card-button--failed' : (task.completed ? 'card-button--completed' : 'card-button--pending')}`}>
+                <article className={`article-state flex-1 ${task.validationDate != null ? 'card-button--completed' : (new Date(task.dueDate) < new Date() ? 'card-button--failed' : 'card-button--pending')}`}>
                     <p>État : Tâche
                         {new Date(task.dueDate) < new Date() ?
-                            ' ratée' : (
+                            ' en retard' : (
                                 task.completed ? ' complétée' : ' en cours'
                             )
                         }
@@ -28,9 +23,13 @@ export default function TaskDetail({ task }) {
                 <article className={"article flex-1"}>
                     <p>Date limite : {new Date(task.dueDate).toLocaleDateString('fr-FR', {day: '2-digit', month: '2-digit', year: 'numeric'})}</p>
                 </article>
+
+                <article className={"article flex-1"}>
+                    <p>Date de validation : {task.validationDate != null ? new Date(task.validationDate).toLocaleDateString('fr-FR', {day: '2-digit', month: '2-digit', year: 'numeric'}) : "pas encore validé"}</p>
+                </article>
             </div>
 
-            <button className={"navigation-button"}><a href={"/"}>Retour</a></button>
+            <button><Link to={`/task`} className={"navigation-button"}>Retour</Link></button>
         </>
     );
 }

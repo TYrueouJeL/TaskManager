@@ -1,4 +1,4 @@
-import {Link, Outlet} from "react-router";
+import {Link, Outlet, useNavigate} from "react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "./supabase/supabaseClient.ts";
 import type { User } from "@supabase/supabase-js";
@@ -6,8 +6,10 @@ import ThemeToggle from "./components/ThemeToggle.tsx";
 
 function App() {
     const [user, setUser] = useState<User | null>(null);
+    const navigate = useNavigate();
 
     const handleSignOut = async () => {
+        navigate('/');
         await supabase.auth.signOut();
         setUser(null);
     };
