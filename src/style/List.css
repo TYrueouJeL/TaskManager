@@ -1,0 +1,7 @@
+.list-button {
+    @apply flex items-center gap-4 p-2 text-gray-500 border border-gray-200 rounded-lg;
+}
+
+.list-button:hover {
+    @apply bg-gray-100;
+}

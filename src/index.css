@@ -1,0 +1,5 @@
+@import "tailwindcss";
+@import "./style/Card.css";
+@import "./style/Detail.css";
+@import "./style/App.css";
+@import "./style/List.css";

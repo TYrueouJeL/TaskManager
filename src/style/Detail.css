@@ -1,0 +1,7 @@
+.article {
+    @apply flex items-center gap-4 p-2 border border-gray-200 rounded-lg mb-4;
+}
+
+.article-state {
+    @apply flex items-center gap-1 p-2 border rounded-lg mb-4;
+}
