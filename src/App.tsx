@@ -28,7 +28,7 @@ function App() {
 
     return (
         <>
-            <header className="bg-gradient-to-r from-blue-900 to-purple-900 text-white p-4 mb-4">
+            <header className="header">
                 <div className="container mx-auto px-4">
                     <div className="flex items-center justify-between">
                         <h1 className="text-2xl cursor-default">TaskManager</h1>

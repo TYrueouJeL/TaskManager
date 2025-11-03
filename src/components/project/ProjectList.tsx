@@ -38,13 +38,11 @@ export default function ProjectList() {
         event.preventDefault();
     }
 
-    const cards = filteredProjects.map(project => <ProjectCard key={project.id} project={project} />);
+    const cards = filteredProjects.map(project => <ProjectCard key={project.id} project={project}/>);
 
     return (
         <>
-            <div className="flex items-center justify-between mb-4">
-                <h1 className={"title"}>Liste des projets</h1>
-
+            <div className="flex items-center justify-center mb-4">
                 <SearchForm
                     search={search}
                     onSearch={formData => setSearch(formData)}
@@ -53,8 +51,6 @@ export default function ProjectList() {
                     searchChamp="title"
                 />
             </div>
-
-            <h1>{filteredProjects.length} Projet(s)</h1>
 
             <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 my-4 ml-2 mr-2">
                 {cards}

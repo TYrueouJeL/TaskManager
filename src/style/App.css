@@ -41,3 +41,11 @@ html.dark .navigation-button:hover {
 html.dark .title {
     @apply text-gray-200;
 }
+
+.header {
+    @apply bg-gradient-to-r from-green-400 to-blue-500 text-white p-4 mb-4;
+}
+
+html.dark .header {
+    @apply bg-gradient-to-r from-blue-900 to-purple-900 text-gray-200;
+}

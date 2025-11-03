@@ -1,31 +1,91 @@
-.card-button {
-    @apply flex items-center gap-4 p-2 border rounded-lg;
+.card-article:hover {
+    @apply -translate-y-0.5 transition;
 }
 
-.card-button:hover {
-    @apply bg-gray-100;
+html.dark .card-article:hover {
+    @apply -translate-y-0.5 transition;
 }
 
-html.dark .card-button:hover {
-    @apply bg-slate-700;
-}
-
-.card-button--completed {
+.card-article--completed {
     @apply border-green-500;
 }
 
-.card-button--pending {
+.card-article--pending {
     @apply border-yellow-500;
 }
 
-.card-button--failed {
+.card-article--failed {
     @apply border-red-500;
 }
 
-.card-button--category {
-    --category-color-hover: inherit;
+.card-article--category:hover {
+    background-color: var(--category-color-hover) !important;
 }
 
-.card-button--category:hover {
-    background-color: var(--category-color-hover) !important;
+.progress-bar {
+    @apply h-2 rounded-full bg-gray-200 w-full;
+}
+
+.card-article {
+    @apply bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-200 p-6 flex flex-col gap-4 border-l-4;
+}
+
+html.dark .card-article {
+    @apply bg-gray-800;
+}
+
+.card-title {
+    @apply text-lg md:text-xl font-semibold text-gray-900;
+}
+
+html.dark .card-title {
+    @apply text-gray-100;
+}
+
+.card-subtitle {
+    @apply mt-1 text-sm text-gray-500;
+}
+
+html.dark .card-subtitle {
+    @apply text-gray-300;
+}
+
+.card-icon {
+    @apply px-3 py-1 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 text-xs font-medium
+}
+
+html.dark .card-icon {
+    @apply bg-gradient-to-r from-blue-900 to-blue-800 text-blue-200;
+}
+
+.card-description {
+    @apply text-sm text-gray-700;
+}
+
+html.dark .card-description {
+    @apply text-gray-300;
+}
+
+.card-progress {
+    @apply w-full bg-gray-200 rounded-full h-3 overflow-hidden;
+}
+
+html.dark .card-progress {
+    @apply bg-gray-700;
+}
+
+.card-progress div {
+    @apply h-full bg-gradient-to-r from-green-400 to-blue-500 transition-all duration-300;
+}
+
+html.dark .card-progress div {
+    @apply from-blue-500 to-purple-600;
+}
+
+.card-progress-footer {
+    @apply mt-2 text-xs text-gray-500 flex justify-between;
+}
+
+html.dark .card-progress-footer {
+    @apply text-gray-400;
 }

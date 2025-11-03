@@ -27,15 +27,9 @@ export default function TaskList({tasks}) {
 
     const cards = filteredTasks.map(task => <TaskCard key={task.id} task={task} />);
 
-    const finishedTasks = filteredTasks.filter(task => task.validationDate != null);
-    const unfinishedTasks = filteredTasks.filter(task => task.validationDate === null);
-    const overdueTasks = filteredTasks.filter(task => new Date(task.dueDate) < new Date() && task.validationDate === null);
-
     return (
         <>
-            <div className="flex items-center justify-between mb-4">
-                <h1 className={"title"}>Liste des tâches</h1>
-
+            <div className="flex items-center justify-center mb-4">
                 <SearchForm
                     search={search}
                     onSearch={formData => setSearch(formData)}
@@ -43,12 +37,6 @@ export default function TaskList({tasks}) {
                     onSubmit={handleFormSubmit}
                     searchChamp="title"
                 />
-            </div>
-
-            <div className={'flex gap-4 items-center mb-4'}>
-                <h1>{finishedTasks.length} Tâche(s) terminée(s)</h1>
-                <h1>{unfinishedTasks.length} Tâche(s) en cours</h1>
-                <h1>{overdueTasks.length} Tâches(s) en retard</h1>
             </div>
 
             <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 my-4 ml-2 mr-2">

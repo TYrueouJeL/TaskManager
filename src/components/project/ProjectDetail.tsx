@@ -47,7 +47,6 @@ export default function ProjectDetail({ project }) {
             </div>
 
             <section className="mt-6">
-                <h3 className="title">Tâches du projet</h3>
                 <TaskList tasks={projectTasks}/>
             </section>
         </>
