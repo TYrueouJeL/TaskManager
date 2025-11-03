@@ -3,26 +3,8 @@ import { supabase } from "../../supabase/supabaseClient.ts";
 import TaskCard from "./TaskCard.tsx";
 import SearchForm from "../SearchForm.tsx";
 
-export default function TaskList() {
+export default function TaskList({tasks}) {
     const [search, setSearch] = useState({ title: '' });
-    const [tasks, setTasks] = useState([]);
-
-    useEffect(() => {
-        async function loadTasks() {
-            const { data, error } = await supabase
-                .from('task')
-                .select('*')
-                .order('dueDate', { ascending: true });
-
-            if (error) {
-                console.error('Error fetching tasks:', error);
-            } else {
-                setTasks(data);
-            }
-        }
-
-        loadTasks();
-    }, []);
 
     if (!tasks) {
         return <div>Chargement...</div>;
