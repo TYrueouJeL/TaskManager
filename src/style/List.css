@@ -5,3 +5,11 @@
 .list-button:hover {
     @apply bg-gray-100;
 }
+
+html.dark .list-button {
+    @apply border-gray-700 text-gray-400;
+}
+
+html.dark .list-button:hover {
+    @apply bg-slate-800;
+}

@@ -6,6 +6,10 @@
     @apply bg-gray-100;
 }
 
+html.dark .card-button:hover {
+    @apply bg-slate-700;
+}
+
 .card-button--completed {
     @apply border-green-500;
 }

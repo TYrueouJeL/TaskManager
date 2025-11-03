@@ -2,6 +2,7 @@ import {Link, Outlet} from "react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "./supabase/supabaseClient.ts";
 import type { User } from "@supabase/supabase-js";
+import ThemeToggle from "./components/ThemeToggle.tsx";
 
 function App() {
     const [user, setUser] = useState<User | null>(null);
@@ -28,7 +29,7 @@ function App() {
             <header className="bg-gradient-to-r from-blue-900 to-purple-900 text-white p-4 mb-4">
                 <div className="container mx-auto px-4">
                     <div className="flex items-center justify-between">
-                        <h1 className="text-2xl">TaskManager</h1>
+                        <h1 className="text-2xl cursor-default">TaskManager</h1>
 
                         <nav className="flex gap-4">
                             <ul className="flex gap-2">
@@ -36,9 +37,6 @@ function App() {
                                 {user ? (
                                     <>
                                         <li><Link to={"/task"} className="header-button">Tâches</Link></li>
-                                        <li><Link to={"/"} className="header-button">Projets</Link></li>
-                                        <li><Link to={"/"} className="header-button">Priorités</Link></li>
-                                        <li><Link to={"/"} className="header-button">Catégories</Link></li>
                                         <li><button onClick={handleSignOut} className="header-button">Se déconnecter</button></li>
                                     </>
                                 ) : (
@@ -46,6 +44,8 @@ function App() {
                                 )}
                             </ul>
                         </nav>
+
+                        <ThemeToggle/>
                     </div>
                 </div>
             </header>
