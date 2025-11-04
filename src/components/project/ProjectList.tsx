@@ -3,26 +3,8 @@ import SearchForm from "../SearchForm.jsx";
 import {useEffect, useState} from "react";
 import {supabase} from "../../supabase/supabaseClient.ts";
 
-export default function ProjectList() {
+export default function ProjectList({ projects }) {
     const [search, setSearch] = useState({ title: '' });
-    const [projects, setProjects] = useState([]);
-
-    useEffect(() => {
-        async function loadProjects() {
-            const { data, error } = await supabase
-                .from('project')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (error) {
-                console.error('Error fetching projects:', error);
-            } else {
-                setProjects(data);
-            }
-        }
-
-        loadProjects();
-    }, []);
 
     if (!projects || projects.length === 0) {
         return <p className="text-gray-500">Aucun projet trouvé.</p>;

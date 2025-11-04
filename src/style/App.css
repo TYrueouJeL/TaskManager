@@ -27,7 +27,11 @@
 }
 
 .header-button {
-    @apply text-white hover:text-blue-500 px-2;
+    @apply text-white hover:text-green-300 px-2;
+}
+
+html.dark .header-button {
+    @apply text-white hover:text-blue-500;
 }
 
 html.dark .navigation-button {

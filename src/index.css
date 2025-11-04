@@ -3,6 +3,8 @@
 @import "./style/Detail.css";
 @import "./style/App.css";
 @import "./style/List.css";
+@import "./style/ProjectDetail.css";
+@import "./style/Form.css";
 
 html.dark body {
     background-color: theme('colors.slate.900', '#0f172a');

@@ -1,0 +1,231 @@
+/* css
+   src/style/ProjectDetail.css
+*/
+
+/* Racine du composant */
+.project-detail {
+    --text: #111827; /* gray-900 */
+    --muted: #6b7280; /* gray-500 */
+    --card-bg: #ffffff;
+    --card-border: #e5e7eb; /* gray-200 */
+    --accent-success: #16a34a; /* green-600 */
+    --accent-warn: #d97706; /* amber-600 */
+    --accent-danger: #dc2626; /* red-600 */
+    --shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+/* Dark mode overrides (supporte .dark sur un parent ou data-theme="dark") */
+.dark .project-detail,
+[data-theme="dark"] .project-detail {
+    --text: #e6eef8; /* light text */
+    --muted: #9aa6bf;
+    --card-bg: #0f1724; /* card dark */
+    --card-border: rgba(255,255,255,0.04);
+    --accent-success: #34d399;
+    --accent-warn: #f59e0b;
+    --accent-danger: #f87171;
+    --shadow: 0 1px 2px rgba(2,6,23,0.6);
+}
+
+/* Layout */
+.project-detail__container {
+    max-width: 48rem; /* ~3xl */
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+/* Header */
+.project-detail__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.project-detail__title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+.project-detail__meta {
+    font-size: 0.875rem;
+    color: var(--muted);
+    margin-top: 0.25rem;
+}
+
+/* Actions */
+.project-detail__actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+.project-detail__link {
+    color: var(--muted);
+    font-size: 0.875rem;
+    text-decoration: none;
+}
+.project-detail__btn {
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 0.4rem;
+    border-radius: 0.375rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: inherit;
+}
+.project-detail__btn:hover {
+    background-color: rgba(0,0,0,0.03);
+}
+.dark .project-detail__btn:hover,
+[data-theme="dark"] .project-detail__btn:hover {
+    background-color: rgba(255,255,255,0.02);
+}
+.project-detail__btn--danger {
+    color: var(--accent-danger);
+}
+.project-detail__btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Card */
+.project-detail__card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 1rem;
+}
+
+/* Status row */
+.project-detail__status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+.project-detail__status .state {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted);
+}
+.project-detail__due {
+    font-size: 0.875rem;
+    color: var(--muted);
+}
+
+/* Description */
+.project-detail__description {
+    color: var(--text);
+}
+
+/* Stats grid */
+.project-detail__stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+.project-detail__stat {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow);
+}
+.project-detail__stat .label {
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+.project-detail__stat .value {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-top: 0.25rem;
+}
+
+/* Tasks list */
+.project-detail__tasks {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow);
+}
+.project-detail__task-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+}
+.project-detail__task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.65rem;
+    border-radius: 0.375rem;
+    background: transparent;
+    border: 1px solid transparent;
+}
+.project-detail__task-item:hover {
+    background-color: rgba(0,0,0,0.02);
+}
+.dark .project-detail__task-item:hover,
+[data-theme="dark"] .project-detail__task-item:hover {
+    background-color: rgba(255,255,255,0.02);
+}
+
+/* Task info */
+.project-detail__task-info {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+.project-detail__task-title {
+    font-weight: 600;
+}
+.project-detail__task-due {
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+/* States */
+.project-detail__task-done .project-detail__task-title {
+    text-decoration: line-through;
+    color: var(--muted);
+}
+.project-detail__task-overdue .project-detail__task-due,
+.project-detail__task-overdue .project-detail__overdue-badge {
+    color: var(--accent-danger);
+    font-weight: 600;
+}
+.project-detail__overdue-badge {
+    font-size: 0.75rem;
+    margin-right: 0.5rem;
+}
+
+/* Icon colors */
+.project-detail__icon--done { color: var(--accent-success); }
+.project-detail__icon--pending { color: var(--accent-warn); }
+
+/* Accessible focus */
+.project-detail__btn:focus,
+.project-detail__link:focus,
+.project-detail__task-item:focus {
+    outline: 3px solid rgba(59,130,246,0.25);
+    outline-offset: 2px;
+    border-radius: 0.375rem;
+}
+
+/* Small screens tweaks */
+@media (max-width: 640px) {
+    .project-detail__stats { grid-template-columns: 1fr 1fr; }
+    .project-detail__header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+}

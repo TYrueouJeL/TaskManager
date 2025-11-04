@@ -1,14 +1,9 @@
 import { useLoaderData } from "react-router";
-import {supabase} from "../../supabase/supabaseClient.ts";
 import ProjectDetail from "../../components/project/ProjectDetail.tsx";
-import {useEffect} from "react";
+import {getProject} from "../../services/api.ts";
 
 export async function loader({ params }) {
-    const { data: project, error } = await supabase
-        .from('project')
-        .select('*')
-        .eq('id', params.id)
-        .single();
+    const { data: project, error } = await getProject(params.id);
 
     if (error) {
         throw new Response("Task not found", { status: 404 });

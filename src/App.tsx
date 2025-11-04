@@ -38,8 +38,8 @@ function App() {
                                 <li><Link to="/" className="header-button">Accueil</Link></li>
                                 {user ? (
                                     <>
-                                        <li><Link to={"/task"} className="header-button">Tâches</Link></li>
-                                        <li><Link to={"/project"} className={"header-button"}>Projets</Link></li>
+                                        <li><Link to={"/task/list"} className="header-button">Tâches</Link></li>
+                                        <li><Link to={"/project/list"} className={"header-button"}>Projets</Link></li>
                                         <li><button onClick={handleSignOut} className="header-button">Se déconnecter</button></li>
                                     </>
                                 ) : (
