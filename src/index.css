@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@import "./style/Card.css";
+@import "./style/Detail.css";
+@import "./style/App.css";
+@import "./style/List.css";
+@import "./style/ProjectDetail.css";
+@import "./style/Form.css";
+
+html.dark body {
+    background-color: theme('colors.slate.900', '#0f172a');
+    color: theme('colors.slate.100', '#e6eef8');
+}

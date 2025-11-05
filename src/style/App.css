@@ -1,0 +1,55 @@
+.navigation-button {
+    @apply flex items-center gap-4 p-2 border rounded-lg;
+}
+
+.navigation-button:hover {
+    @apply bg-gray-200;
+}
+
+.delete-button {
+    @apply bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600;
+}
+
+.delete-button:hover {
+    @apply bg-red-600;
+}
+
+.edit-button {
+    @apply bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600;
+}
+
+.edit-button:hover {
+    @apply bg-blue-600;
+}
+
+.title {
+    @apply text-2xl font-bold text-gray-800 mb-4;
+}
+
+.header-button {
+    @apply text-white hover:text-green-300 px-2;
+}
+
+html.dark .header-button {
+    @apply text-white hover:text-blue-500;
+}
+
+html.dark .navigation-button {
+    @apply border-slate-700;
+}
+
+html.dark .navigation-button:hover {
+    @apply bg-slate-700;
+}
+
+html.dark .title {
+    @apply text-gray-200;
+}
+
+.header {
+    @apply bg-gradient-to-r from-green-400 to-blue-500 text-white p-4 mb-4;
+}
+
+html.dark .header {
+    @apply bg-gradient-to-r from-blue-900 to-purple-900 text-gray-200;
+}
