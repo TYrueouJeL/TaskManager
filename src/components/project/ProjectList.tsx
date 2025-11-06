@@ -1,6 +1,7 @@
 import ProjectCard from "./ProjectCard.jsx";
 import SearchForm from "../SearchForm.jsx";
 import {useState} from "react";
+import {Link} from "react-router";
 
 export default function ProjectList({ projects }) {
     const [search, setSearch] = useState({ title: '' });
@@ -31,6 +32,8 @@ export default function ProjectList({ projects }) {
                     onSubmit={handleFormSubmit}
                     searchChamp="title"
                 />
+
+                <Link to={`/project/create`} className={"create-button"}>Nouveau projet</Link>
             </div>
 
             <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 my-4 ml-2 mr-2">
