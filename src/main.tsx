@@ -14,6 +14,7 @@ import TaskDetail, { loader as TaskDetailLoader } from "./routes/task/TaskDetail
 import ProjectDetail, { loader as ProjectDetailLoader } from "./routes/project/ProjectDetail.tsx";
 import TaskEdit, { loader as TaskEditLoader } from "./routes/task/TaskEdit.tsx";
 import TaskCreate from "./routes/task/TaskCreate.tsx";
+import ProjectCreate from "./routes/project/ProjectCreate.tsx";
 
 const router = createBrowserRouter([
     {
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
             { path: "project", children: [
                     { path: "list", element: <ProtectedRoute><Project/></ProtectedRoute> },
                     { path: ":id", element: <ProtectedRoute><ProjectDetail/></ProtectedRoute>, loader: ProjectDetailLoader },
+                    { path: "create", element: <ProtectedRoute><ProjectCreate/></ProtectedRoute>}
                 ] },
         ]
     }
