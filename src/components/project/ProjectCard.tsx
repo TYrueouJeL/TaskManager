@@ -1,16 +1,13 @@
 import { Link } from 'react-router';
 import {useEffect, useState} from "react";
-import {supabase} from "../../supabase/supabaseClient.ts";
+import {getTasks} from "../../services/api.ts";
 
 export default function ProjectCard({ project }) {
     const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
         async function loadTasks() {
-            const {data, error} = await supabase
-                .from('task')
-                .select('*')
-                .eq('project_id', project.id);
+            const { data, error } = await getTasks({ projectId: project.id });
 
             if (error) {
                 console.error('Error fetching tasks:', error);
@@ -20,7 +17,7 @@ export default function ProjectCard({ project }) {
         }
 
         loadTasks();
-    }, []);
+    }, [project.id]);
 
     const completedTasks = tasks.filter(task => task.validationDate != null).length;
     const totalTasks = tasks.length;

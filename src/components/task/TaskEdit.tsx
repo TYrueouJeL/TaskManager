@@ -1,7 +1,6 @@
 import {type FormEvent, useState} from "react";
 import {Link, useNavigate} from "react-router";
 import {updateTask} from "../../services/api.ts";
-import {RiDeleteBinLine, RiEditLine} from "react-icons/ri";
 
 export default function TaskEdit({ task }: { task: any }) {
     const [title, setTitle] = useState(task.title);

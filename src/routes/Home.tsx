@@ -1,31 +1,9 @@
 // src/routes/Home.tsx
 import { Link } from 'react-router';
-import { RiCheckboxCircleLine, RiFolderOpenLine, RiAddLine, RiListUnordered, RiSearchLine } from 'react-icons/ri';
+import { RiCheckboxCircleLine, RiFolderOpenLine, RiAddLine, RiSearchLine } from 'react-icons/ri';
 import { useEffect, useState } from "react";
-import { supabase } from "../supabase/supabaseClient.ts";
-
-type ID = string | number;
-
-interface Task {
-    id: ID;
-    title?: string | null;
-    dueDate?: string | null;
-    validationDate?: string | null;
-    completed?: boolean;
-    projectId?: ID | null;
-    project_id?: ID | null;
-    projectName?: string | null;
-    priority?: string | null;
-}
-
-interface Project {
-    id: ID;
-    name?: string | null;
-    title?: string | null;
-    description?: string | null;
-    archived?: boolean | null;
-    task_count?: number | null;
-}
+import type { Task, Project } from '../db.ts';
+import {getTasks, getProjects} from "../services/api.ts";
 
 export default function Home() {
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -33,26 +11,18 @@ export default function Home() {
 
     useEffect(() => {
         async function loadData() {
-            const { data: tasksData, error: tasksError } = await supabase
-                .from('task')
-                .select('*')
-                .order('dueDate', { ascending: true });
-
-            const { data: projectsData, error: projectsError } = await supabase
-                .from('project')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (tasksError) {
-                console.error('Error fetching tasks:', tasksError);
+            const { data: taskData, error: taskError } = await getTasks();
+            if (taskError) {
+                console.error('Error fetching tasks:', taskError);
             } else {
-                setTasks((tasksData ?? []) as Task[]);
+                setTasks(taskData);
             }
 
-            if (projectsError) {
-                console.error('Error fetching projects:', projectsError);
+            const { data: projectData, error: projectError } = await getProjects();
+            if (projectError) {
+                console.error('Error fetching projects:', projectError);
             } else {
-                setProjects((projectsData ?? []) as Project[]);
+                setProjects(projectData);
             }
         }
 
@@ -140,14 +110,6 @@ export default function Home() {
                                 <RiAddLine /> Nouveau projet
                             </Link>
                         </div>
-                    </div>
-
-                    <div className="card p-4">
-                        <h2 className="font-semibold mb-2">Raccourcis</h2>
-                        <nav className="flex flex-col gap-2 text-sm">
-                            <Link to="/task" className="text-gray-700 hover:underline flex items-center gap-2"><RiListUnordered /> Toutes les tâches</Link>
-                            <Link to="/project" className="text-gray-700 hover:underline flex items-center gap-2"><RiFolderOpenLine /> Tous les projets</Link>
-                        </nav>
                     </div>
                 </section>
 

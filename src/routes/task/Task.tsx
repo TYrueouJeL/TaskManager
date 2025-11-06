@@ -18,6 +18,7 @@ export default function Task() {
 
         loadTasks();
     }, []);
+
     return (
         <>
             <div className="flex flex-col items-center justify-center mb-4">

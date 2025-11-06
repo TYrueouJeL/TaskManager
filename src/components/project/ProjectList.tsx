@@ -1,7 +1,6 @@
 import ProjectCard from "./ProjectCard.jsx";
 import SearchForm from "../SearchForm.jsx";
-import {useEffect, useState} from "react";
-import {supabase} from "../../supabase/supabaseClient.ts";
+import {useState} from "react";
 
 export default function ProjectList({ projects }) {
     const [search, setSearch] = useState({ title: '' });

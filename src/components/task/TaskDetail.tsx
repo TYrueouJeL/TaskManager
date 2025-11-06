@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router';
-import { RiCheckLine, RiCloseLine, RiEditLine, RiDeleteBinLine, RiTimeLine } from 'react-icons/ri';
-import { supabase } from '../../supabase/supabaseClient.ts';
+import { Link, useParams } from 'react-router';
+import { RiCheckLine, RiEditLine, RiTimeLine } from 'react-icons/ri';
+import {getTask} from "../../services/api.ts";
 
 function formatDate(iso?: string | null) {
     if (!iso) return '-';
@@ -18,30 +18,18 @@ export default function TaskDetail() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        let mounted = true;
-        async function load() {
+        async function fetchTask() {
             setLoading(true);
             setError(null);
-            try {
-                const res = await supabase
-                    .from('task')
-                    .select('*')
-                    .eq('id', id)
-                    .single();
-
-                if (!mounted) return;
-
-                if (res.error) throw res.error;
-                setTask(res.data ?? null);
-            } catch (err: any) {
-                setError(err?.message ?? 'Erreur lors du chargement de la tâche');
-            } finally {
-                if (mounted) setLoading(false);
+            const { data, error } = await getTask(id!);
+            if (error) {
+                setError('Erreur lors du chargement de la tâche.');
+            } else {
+                setTask(data);
             }
+            setLoading(false);
         }
-
-        if (id) load();
-        return () => { mounted = false; };
+        fetchTask();
     }, [id]);
 
     if (loading) return <div className="text-sm text-gray-500">Chargement…</div>;
