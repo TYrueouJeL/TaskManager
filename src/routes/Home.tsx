@@ -155,7 +155,7 @@ export default function Home() {
                     <div className="card p-4">
                         <div className="flex items-center justify-between mb-3">
                             <h2 className="font-semibold text-lg flex items-center gap-2"><RiSearchLine /> Tâches à venir</h2>
-                            <Link to="/task" className="text-sm text-blue-600 hover:underline">Voir toutes</Link>
+                            <Link to="/task/list" className="text-sm text-blue-600 hover:underline">Voir toutes</Link>
                         </div>
 
                         {upcomingTasks.length === 0 ? (
@@ -165,12 +165,12 @@ export default function Home() {
                                 {upcomingTasks.map(task => {
                                     const status = getTaskStatus(task);
                                     return (
-                                        <li key={task.id} className="flex items-center justify-between">
+                                        <Link to={`/task/${task.id}`} key={task.id} className="flex items-center justify-between">
                                             <div>
-                                                <Link to={`/task/${task.id}`} className="font-medium text-gray-800 hover:underline">
+                                                <p className="card-title">
                                                     {task.title ?? 'Sans titre'}
-                                                </Link>
-                                                <div className="text-xs text-gray-500">
+                                                </p>
+                                                <div className="card-subtitle">
                                                     {task.projectName ? `${task.projectName} • ` : ''}
                                                     {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Pas de date'}
                                                 </div>
@@ -185,7 +185,7 @@ export default function Home() {
                                                     {status}
                                                 </span>
                                             </div>
-                                        </li>
+                                        </Link>
                                     );
                                 })}
                             </ul>
@@ -195,7 +195,7 @@ export default function Home() {
                     <div className="card p-4">
                         <div className="flex items-center justify-between mb-3">
                             <h2 className="font-semibold text-lg">Projets en cours</h2>
-                            <Link to="/project" className="text-sm text-blue-600 hover:underline">Voir tous</Link>
+                            <Link to="/project/list" className="text-sm text-blue-600 hover:underline">Voir tous</Link>
                         </div>
 
                         {ongoingProjects.length === 0 ? (
@@ -206,20 +206,24 @@ export default function Home() {
                                     const { percent, done, total } = projectCompletion(project);
                                     const name = project.name ?? project.title ?? 'Nom du projet';
                                     return (
-                                        <li key={project.id} className="flex items-center justify-between">
+                                        <Link to={`/project/${project.id}`} key={project.id} className="flex items-center justify-between">
                                             <div className="w-3/4">
-                                                <Link to={`/project/${project.id}`} className="font-medium text-gray-800 hover:underline">
+                                                <p className="card-title">
                                                     {name}
-                                                </Link>
-                                                <div className="text-xs text-gray-500">
+                                                </p>
+                                                <div className="card-subtitle">
                                                     {project.description ? `${project.description}` : ''}
                                                 </div>
 
-                                                <div className="mt-2 bg-gray-100 rounded-full h-2 overflow-hidden">
-                                                    <div
-                                                        className="bg-blue-500 h-2"
-                                                        style={{ width: `${percent}%` }}
-                                                    />
+                                                <div className="mt-3">
+                                                    <div className="card-progress">
+                                                        <div
+                                                            style={{ width: `${percent}%` }}
+                                                            aria-valuenow={Math.round(percent)}
+                                                            aria-valuemin={0}
+                                                            aria-valuemax={100}
+                                                        />
+                                                    </div>
                                                 </div>
                                                 <div className="text-xs text-gray-400 mt-1">
                                                     {total > 0 ? `${done}/${total} tâches — ${percent}%` : (project.task_count ? `${project.task_count} tâches` : '0 tâches')}
@@ -227,9 +231,9 @@ export default function Home() {
                                             </div>
 
                                             <div className="text-xs text-gray-400">
-                                                {percent}% compl.
+                                                {percent}%
                                             </div>
-                                        </li>
+                                        </Link>
                                     );
                                 })}
                             </ul>
