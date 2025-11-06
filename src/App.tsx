@@ -15,6 +15,7 @@ function App() {
         await supabase.auth.signOut();
         setUser(null);
         setMenuOpen(false);
+        navigate(0);
     };
 
     useEffect(() => {
