@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
-import { supabase } from "../../supabase/supabaseClient.ts";
-import TaskCard from "./TaskCard.tsx";
 import SearchForm from "../SearchForm.tsx";
+import TaskCard from "./TaskCard.tsx";
 
 export default function TaskList({tasks}) {
     const [search, setSearch] = useState({ title: '' });

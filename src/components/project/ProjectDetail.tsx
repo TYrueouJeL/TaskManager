@@ -144,7 +144,7 @@ export default function ProjectDetail() {
                     </div>
 
                     <div className="project-detail__actions">
-                        <Link to="/project" className="project-detail__link">← Retour</Link>
+                        <Link to="/project/list" className="project-detail__link">← Retour</Link>
                         <Link to={`/project/edit/${project.id}`} className="project-detail__link" title="Éditer">
                             <RiEditLine />
                         </Link>
