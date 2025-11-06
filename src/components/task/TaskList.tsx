@@ -10,10 +10,6 @@ export default function TaskList({tasks}) {
         return <div>Chargement...</div>;
     }
 
-    if (tasks.length === 0) {
-        return <div>Aucune tâche trouvée.</div>;
-    }
-
     const filteredTasks = tasks.filter(task => {
         const title = task.title.toLowerCase();
         const searchTitle = search.title.toLowerCase();

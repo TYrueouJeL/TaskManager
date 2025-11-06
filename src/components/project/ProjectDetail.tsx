@@ -85,7 +85,7 @@ export default function ProjectDetail() {
         try {
             const res = await deleteProject(id);
             if (res.error) throw res.error;
-            navigate('/project');
+            navigate('/project/list');
         } catch (err: unknown) {
             const msg = err instanceof Error ? err.message : String(err ?? 'Erreur lors de la suppression');
             setError(msg);

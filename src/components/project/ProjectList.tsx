@@ -5,8 +5,8 @@ import {useState} from "react";
 export default function ProjectList({ projects }) {
     const [search, setSearch] = useState({ title: '' });
 
-    if (!projects || projects.length === 0) {
-        return <p className="text-gray-500">Aucun projet trouvé.</p>;
+    if (!projects) {
+        return <div>Chargement...</div>;
     }
 
     const filteredProjects = projects.filter(project => {
