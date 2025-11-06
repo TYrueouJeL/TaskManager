@@ -24,7 +24,7 @@ export default function ProjectList({ projects }) {
 
     return (
         <>
-            <div className="flex items-center justify-center mb-4">
+            <div className="flex items-center justify-center mb-4 gap-4">
                 <SearchForm
                     search={search}
                     onSearch={formData => setSearch(formData)}
