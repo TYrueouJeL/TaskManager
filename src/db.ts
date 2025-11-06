@@ -1,17 +1,25 @@
 export interface Project {
     id: string;
     title: string;
+    user_id: string;
     description?: string | null;
     created_at?: string | null;
-    validationDate?: string | null;
 }
 
 export interface Task {
     id: string;
     title: string;
-    description?: string | null;
-    dueDate?: string | null;
+    description: string;
+    dueDate: string;
+    user_id: string;
     validationDate?: string | null;
     project_id?: string | null;
+    created_at?: string | null;
+}
+
+export interface User {
+    id: string;
+    email: string;
+    username?: string | null;
     created_at?: string | null;
 }

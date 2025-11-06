@@ -1,13 +1,13 @@
 import { Link } from 'react-router';
 import {useEffect, useState} from "react";
-import {getTasks} from "../../services/api.ts";
+import {getTasksByProject} from "../../services/api.ts";
 
 export default function ProjectCard({ project }) {
     const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
         async function loadTasks() {
-            const { data, error } = await getTasks({ projectId: project.id });
+            const { data, error } = await getTasksByProject(project.id);
 
             if (error) {
                 console.error('Error fetching tasks:', error);

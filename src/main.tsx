@@ -13,6 +13,7 @@ import {ThemeProvider} from "./context/ThemeContext.tsx";
 import TaskDetail, { loader as TaskDetailLoader } from "./routes/task/TaskDetail.tsx";
 import ProjectDetail, { loader as ProjectDetailLoader } from "./routes/project/ProjectDetail.tsx";
 import TaskEdit, { loader as TaskEditLoader } from "./routes/task/TaskEdit.tsx";
+import TaskCreate from "./routes/task/TaskCreate.tsx";
 
 const router = createBrowserRouter([
     {
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
                     { path: "list", element: <ProtectedRoute><Task/></ProtectedRoute> },
                     { path: ":id", element: <ProtectedRoute><TaskDetail/></ProtectedRoute>, loader: TaskDetailLoader },
                     { path: "edit/:id", element: <ProtectedRoute><TaskEdit/></ProtectedRoute>, loader: TaskEditLoader},
+                    { path: "create", element: <ProtectedRoute><TaskCreate/></ProtectedRoute>},
                 ] },
             { path: "project", children: [
                     { path: "list", element: <ProtectedRoute><Project/></ProtectedRoute> },

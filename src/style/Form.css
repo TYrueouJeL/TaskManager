@@ -41,3 +41,11 @@ html.dark .form-input {
 html.dark .form-textarea {
     @apply bg-slate-700 border-slate-600 text-white;
 }
+
+.form-select {
+    @apply w-full border border-gray-300 p-2 rounded;
+}
+
+html.dark .form-select {
+    @apply bg-slate-700 border-slate-600 text-white;
+}

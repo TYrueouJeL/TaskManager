@@ -1,6 +1,7 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import SearchForm from "../SearchForm.tsx";
 import TaskCard from "./TaskCard.tsx";
+import {Link} from "react-router";
 
 export default function TaskList({tasks}) {
     const [search, setSearch] = useState({ title: '' });
@@ -28,7 +29,7 @@ export default function TaskList({tasks}) {
 
     return (
         <>
-            <div className="flex items-center justify-center mb-4">
+            <div className="flex items-center justify-center mb-4 gap-4">
                 <SearchForm
                     search={search}
                     onSearch={formData => setSearch(formData)}
@@ -36,6 +37,8 @@ export default function TaskList({tasks}) {
                     onSubmit={handleFormSubmit}
                     searchChamp="title"
                 />
+
+                <Link to="/task/create" className="create-button">Nouvelle tâche</Link>
             </div>
 
             <section className=" grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 my-4 ml-2 mr-2">

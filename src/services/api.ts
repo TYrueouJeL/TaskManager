@@ -1,5 +1,5 @@
 import { supabase } from '../supabase/supabaseClient';
-import type {Project, Task} from "../db.ts";
+import type {Project, Task, User} from "../db.ts";
 
 export async function getProjects(): Promise<{ data?: Project[]; error?: any }> {
     return supabase.from<Project>('project').select('*');
@@ -41,6 +41,19 @@ export async function updateTask(id: string, payload: Partial<Task>) {
     return supabase.from<Task>('task').update(payload).eq('id', id).single();
 }
 
+export async function validateTask(id: string) {
+    return supabase.from<Task>('task').update({ validationDate: new Date().toISOString() }).eq('id', id).single();
+}
+
 export async function deleteTask(id: string) {
     return supabase.from<Task>('task').delete().eq('id', id).single();
+}
+
+export async function getActualUser() {
+    const user = supabase.auth.getUser();
+    return (await user).data.user as User;
+}
+
+export async function getUser(id: string) {
+    return supabase.from<User>('user').select('*').eq('id', id).single();
 }

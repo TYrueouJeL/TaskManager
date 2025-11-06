@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
-import { RiCheckLine, RiTimeLine, RiEditLine, RiDeleteBinLine } from 'react-icons/ri';
+import {RiCheckLine, RiTimeLine, RiEditLine, RiDeleteBinLine} from 'react-icons/ri';
 import '../../style/ProjectDetail.css';
 import type { Project, Task } from '../../db';
 import {
@@ -8,8 +8,8 @@ import {
     getTasksByProject,
     deleteProject,
     deleteTask,
-    updateTask
 } from '../../services/api';
+import {FaEye} from "react-icons/fa";
 
 function formatDate(iso?: string | null) {
     if (!iso) return '-';
@@ -106,18 +106,6 @@ export default function ProjectDetail() {
         }
     }
 
-    async function toggleTaskValidation(t: Task) {
-        try {
-            const payload = { validationDate: t.validationDate ? null : new Date().toISOString() };
-            const res = await updateTask(t.id, payload);
-            if (res.error) throw res.error;
-            setTasks(prev => prev.map(it => it.id === t.id ? { ...it, validationDate: (payload as any).validationDate } : it));
-        } catch (err: unknown) {
-            const msg = err instanceof Error ? err.message : String(err ?? 'Erreur lors de la mise à jour');
-            setTasksError(msg);
-        }
-    }
-
     if (loading) return <div className="project-detail project-detail__container text-sm text-gray-500">Chargement…</div>;
     if (error) return <div className="project-detail project-detail__container text-sm text-red-600">{error}</div>;
     if (!project) return <div className="project-detail project-detail__container text-sm text-gray-500">Projet introuvable.</div>;
@@ -149,7 +137,7 @@ export default function ProjectDetail() {
                             <RiEditLine />
                         </Link>
                         <button onClick={handleDelete} disabled={deleting} className="project-detail__link" title="Supprimer">
-                            <RiDeleteBinLine />
+                            <RiDeleteBinLine className="text-red-500 cursor-pointer" />
                         </button>
                     </div>
                 </div>
@@ -201,11 +189,9 @@ export default function ProjectDetail() {
                             ].join(' ').trim();
 
                             return (
-                                <li key={task.id} className={itemClass} tabIndex={0}>
+                                <li to={`/task/${task.id}`} key={task.id} className={itemClass} tabIndex={0}>
                                     <div className="project-detail__task-info">
-                                        <button onClick={() => toggleTaskValidation(task)} aria-label="toggle validation" className="icon-btn">
-                                            {done ? <RiCheckLine className="project-detail__icon--done" /> : <RiTimeLine className="project-detail__icon--pending" />}
-                                        </button>
+                                        {done ? <RiCheckLine className="project-detail__icon--done" /> : <RiTimeLine className="project-detail__icon--pending" />}
                                         <div>
                                             <div className="project-detail__task-title">{task.title}</div>
                                             <div className="project-detail__task-due">Échéance : {formatDate(task.dueDate)}</div>
@@ -217,9 +203,12 @@ export default function ProjectDetail() {
                                         <Link to={`/task/edit/${task.id}`} className="project-detail__link" title="Éditer">
                                             <RiEditLine />
                                         </Link>
-                                        <button onClick={() => handleDeleteTask(task.id)} className="project-detail__link" title="Supprimer">
-                                            <RiDeleteBinLine />
+                                        <button onClick={() => handleDeleteTask(task.id)} title="Supprimer">
+                                            <RiDeleteBinLine className="text-red-500 cursor-pointer" />
                                         </button>
+                                        <Link to={`/task/${task.id}`} title="Détail">
+                                            <FaEye className={"text-blue-500 cursor-pointer"}/>
+                                        </Link>
                                     </div>
                                 </li>
                             );

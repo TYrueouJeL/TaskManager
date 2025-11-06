@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router';
-import { RiCheckLine, RiEditLine, RiTimeLine } from 'react-icons/ri';
-import {getTask} from "../../services/api.ts";
+import {Link, useNavigate, useParams} from 'react-router';
+import {RiCheckLine, RiDeleteBinLine, RiEditLine, RiTimeLine} from 'react-icons/ri';
+import {deleteTask, getTask} from "../../services/api.ts";
+import {FaCheck, FaCross} from "react-icons/fa6";
+import {validateTask} from "../../services/api.ts";
+import {RxCross2} from "react-icons/rx";
 
 function formatDate(iso?: string | null) {
     if (!iso) return '-';
@@ -16,6 +19,7 @@ export default function TaskDetail() {
     const [task, setTask] = useState(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchTask() {
@@ -32,6 +36,30 @@ export default function TaskDetail() {
         fetchTask();
     }, [id]);
 
+    const handleValidate = async () => {
+        if (!task) return;
+        setLoading(true);
+        const { data, error } = await validateTask(task.id);
+        if (error) {
+            setError('Erreur lors de la validation de la tâche.');
+        } else {
+            setTask(data);
+        }
+        navigate(0);
+    }
+
+    const handleDelete = async () => {
+        if (!task) return;
+        setLoading(true);
+        const { data, error } = await deleteTask(task.id);
+        if (error) {
+            setError('Erreur lors de la suppression de la tâche.');
+        } else {
+            navigate('/task/list');
+        }
+        setLoading(false);
+    }
+
     if (loading) return <div className="text-sm text-gray-500">Chargement…</div>;
     if (error) return <div className="text-sm text-red-600">{error}</div>;
     if (!task) return <div className="text-sm text-gray-500">Tâche introuvable.</div>;
@@ -47,9 +75,22 @@ export default function TaskDetail() {
                     <p className="text-sm text-gray-500 mt-1">Créée le {formatDate(task.created_at)}</p>
                 </div>
 
-                <Link to={`/task/edit/${task.id}`} title="Éditer">
-                    <RiEditLine />
-                </Link>
+                <div className={"flex items-center justify-center gap-2"}>
+                    <Link to={`/task/edit/${task.id}`} title="Éditer">
+                        <RiEditLine />
+                    </Link>
+
+                    {task.validationDate == null ? (
+                        <button className="text-green-500 cursor-pointer" onClick={handleValidate}>
+                            <FaCheck />
+                        </button>
+                        ) : null
+                    }
+
+                    <button className="text-red-500 cursor-pointer" onClick={handleDelete} title="Supprimer">
+                        <RiDeleteBinLine />
+                    </button>
+                </div>
             </div>
 
             <div className="card p-4 mb-4">
