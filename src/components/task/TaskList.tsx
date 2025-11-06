@@ -38,7 +38,7 @@ export default function TaskList({tasks}) {
                 />
             </div>
 
-            <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 my-4 ml-2 mr-2">
+            <section className=" grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 my-4 ml-2 mr-2">
                 {cards}
             </section>
         </>

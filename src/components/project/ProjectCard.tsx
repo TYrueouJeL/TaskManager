@@ -28,7 +28,7 @@ export default function ProjectCard({ project }) {
 
     return (
         <Link to={`/project/${project.id}`}>
-            <article className="card-article">
+            <article className="project-card-article">
                 <header className="flex items-start justify-between gap-4">
                     <div>
                         <h2 className="card-title">

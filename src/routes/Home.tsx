@@ -1,13 +1,35 @@
+// src/routes/Home.tsx
 import { Link } from 'react-router';
 import { RiCheckboxCircleLine, RiFolderOpenLine, RiAddLine, RiListUnordered, RiSearchLine } from 'react-icons/ri';
-import {useEffect, useState} from "react";
-import {supabase} from "../supabase/supabaseClient.ts";
-import TaskList from "../components/task/TaskList.tsx";
-import ProjectList from "../components/project/ProjectList.tsx";
+import { useEffect, useState } from "react";
+import { supabase } from "../supabase/supabaseClient.ts";
+
+type ID = string | number;
+
+interface Task {
+    id: ID;
+    title?: string | null;
+    dueDate?: string | null;
+    validationDate?: string | null;
+    completed?: boolean;
+    projectId?: ID | null;
+    project_id?: ID | null;
+    projectName?: string | null;
+    priority?: string | null;
+}
+
+interface Project {
+    id: ID;
+    name?: string | null;
+    title?: string | null;
+    description?: string | null;
+    archived?: boolean | null;
+    task_count?: number | null;
+}
 
 export default function Home() {
-    const [tasks, setTasks] = useState([]);
-    const [projects, setProjects] = useState([]);
+    const [tasks, setTasks] = useState<Task[]>([]);
+    const [projects, setProjects] = useState<Project[]>([]);
 
     useEffect(() => {
         async function loadData() {
@@ -24,28 +46,57 @@ export default function Home() {
             if (tasksError) {
                 console.error('Error fetching tasks:', tasksError);
             } else {
-                setTasks(tasksData);
+                setTasks((tasksData ?? []) as Task[]);
             }
 
             if (projectsError) {
                 console.error('Error fetching projects:', projectsError);
             } else {
-                setProjects(projectsData);
+                setProjects((projectsData ?? []) as Project[]);
             }
         }
 
         loadData();
-    })
+    }, []);
 
     const taskCount = tasks.length;
-    const projectCount = projects.length
+    const projectCount = projects.length;
 
-    const recentTasks = tasks.filter(task => !task.validationDate).slice(0, 4);
-    const recentProjects = projects.slice(0, 3);
+    const getTaskStatus = (t: Task) => {
+        if (t.validationDate || t.completed) return 'Terminée';
+        if (!t.dueDate) return 'Sans date';
+        const due = new Date(t.dueDate).getTime();
+        const now = Date.now();
+        return due < now ? 'En retard' : 'En cours';
+    };
+
+    const upcomingTasks = tasks
+        .filter(task => !task.validationDate && !task.completed)
+        .sort((a, b) => {
+            const da = a.dueDate ? new Date(a.dueDate).getTime() : Infinity;
+            const db = b.dueDate ? new Date(b.dueDate).getTime() : Infinity;
+            return da - db;
+        })
+        .slice(0, 4);
+
+    const ongoingProjects = projects
+        .filter(p => !p.archived)
+        .slice(0, 3);
+
+    const projectCompletion = (project: Project) => {
+        const pid = project.id;
+        const related = tasks.filter(t => {
+            const pId = t.projectId ?? t.project_id;
+            return pId !== undefined && pId !== null && `${pId}` === `${pid}`;
+        });
+        const total = related.length || (project.task_count ?? 0) || 0;
+        const done = related.filter(t => t.validationDate || t.completed).length;
+        const percent = total === 0 ? 0 : Math.round((done / total) * 100);
+        return { total, done, percent };
+    };
 
     return (
         <div className="max-w-6xl mx-auto p-6">
-            {/* En-tête */}
             <header className="flex items-center justify-between mb-8">
                 <div>
                     <h1 className="text-3xl md:text-4xl font-extrabold">Tableau de bord</h1>
@@ -53,9 +104,7 @@ export default function Home() {
                 </div>
             </header>
 
-            {/* Grille principale */}
             <main className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Colonne gauche : stats & actions */}
                 <section className="lg:col-span-1 space-y-6">
                     <div className="grid grid-cols-2 gap-4">
                         <Link to="/task" className="card-button p-4 flex flex-col">
@@ -102,28 +151,89 @@ export default function Home() {
                     </div>
                 </section>
 
-                {/* Colonne droite : aperçus récents (grande) */}
                 <section className="lg:col-span-2 space-y-6">
                     <div className="card p-4">
                         <div className="flex items-center justify-between mb-3">
-                            <h2 className="font-semibold">Tâches récentes</h2>
-                            <Link to="/task" className="text-sm text-blue-600 hover:underline flex items-center gap-1"><RiSearchLine /> Voir tout</Link>
+                            <h2 className="font-semibold text-lg flex items-center gap-2"><RiSearchLine /> Tâches à venir</h2>
+                            <Link to="/task" className="text-sm text-blue-600 hover:underline">Voir toutes</Link>
                         </div>
 
-                        <ul className="space-y-3">
-                            <TaskList tasks={recentTasks} />
-                        </ul>
+                        {upcomingTasks.length === 0 ? (
+                            <p className="text-sm text-gray-500">Aucune tâche à venir.</p>
+                        ) : (
+                            <ul className="space-y-3">
+                                {upcomingTasks.map(task => {
+                                    const status = getTaskStatus(task);
+                                    return (
+                                        <li key={task.id} className="flex items-center justify-between">
+                                            <div>
+                                                <Link to={`/task/${task.id}`} className="font-medium text-gray-800 hover:underline">
+                                                    {task.title ?? 'Sans titre'}
+                                                </Link>
+                                                <div className="text-xs text-gray-500">
+                                                    {task.projectName ? `${task.projectName} • ` : ''}
+                                                    {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Pas de date'}
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <div className="text-sm text-gray-400">{task.priority ?? ''}</div>
+                                                <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+                                                    status === 'Terminée' ? 'bg-green-100 text-green-700' :
+                                                        status === 'En retard' ? 'bg-red-100 text-red-700' :
+                                                            'bg-yellow-100 text-yellow-700'
+                                                }`}>
+                                                    {status}
+                                                </span>
+                                            </div>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        )}
                     </div>
 
                     <div className="card p-4">
                         <div className="flex items-center justify-between mb-3">
-                            <h2 className="font-semibold">Projets récents</h2>
-                            <Link to="/project" className="text-sm text-blue-600 hover:underline flex items-center gap-1"><RiSearchLine /> Voir tout</Link>
+                            <h2 className="font-semibold text-lg">Projets en cours</h2>
+                            <Link to="/project" className="text-sm text-blue-600 hover:underline">Voir tous</Link>
                         </div>
 
-                        <ul className="space-y-3">
-                            <ProjectList projects={recentProjects} />
-                        </ul>
+                        {ongoingProjects.length === 0 ? (
+                            <p className="text-sm text-gray-500">Aucun projet en cours.</p>
+                        ) : (
+                            <ul className="space-y-3">
+                                {ongoingProjects.map(project => {
+                                    const { percent, done, total } = projectCompletion(project);
+                                    const name = project.name ?? project.title ?? 'Nom du projet';
+                                    return (
+                                        <li key={project.id} className="flex items-center justify-between">
+                                            <div className="w-3/4">
+                                                <Link to={`/project/${project.id}`} className="font-medium text-gray-800 hover:underline">
+                                                    {name}
+                                                </Link>
+                                                <div className="text-xs text-gray-500">
+                                                    {project.description ? `${project.description}` : ''}
+                                                </div>
+
+                                                <div className="mt-2 bg-gray-100 rounded-full h-2 overflow-hidden">
+                                                    <div
+                                                        className="bg-blue-500 h-2"
+                                                        style={{ width: `${percent}%` }}
+                                                    />
+                                                </div>
+                                                <div className="text-xs text-gray-400 mt-1">
+                                                    {total > 0 ? `${done}/${total} tâches — ${percent}%` : (project.task_count ? `${project.task_count} tâches` : '0 tâches')}
+                                                </div>
+                                            </div>
+
+                                            <div className="text-xs text-gray-400">
+                                                {percent}% compl.
+                                            </div>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        )}
                     </div>
                 </section>
             </main>
