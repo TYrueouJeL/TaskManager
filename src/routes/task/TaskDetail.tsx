@@ -1,24 +1,16 @@
 import { useLoaderData } from "react-router-dom";
 import TaskDetail from "../../components/task/TaskDetail.tsx";
 import {getTask} from "../../services/api.ts";
-import {useEffect, useState} from "react";
 
 export async function loader({ params }) {
-    const [task, setTask] = useState(null);
+    const { data: taskData, error: taskError } = await getTask(params.id);
 
-    useEffect(() => {
-        async function fetchData() {
-            const { data: taskData, error: taskError } = await getTask(params.id);
-            if (taskError) {
-                console.error('Error fetching task:', taskError);
-            } else {
-                setTask(taskData);
-            }
-        }
-        fetchData();
-    }, [params.id]);
+    if (taskError) {
+        console.error("Erreur lors du chargement de la tâche :", taskError);
+        throw new Response("Erreur lors du chargement de la tâche", { status: 500 });
+    }
 
-    return { task };
+    return { task: taskData };
 }
 
 export default function Task() {
