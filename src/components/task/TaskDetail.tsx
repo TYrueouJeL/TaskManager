@@ -70,7 +70,7 @@ export default function TaskDetail() {
         <div className="max-w-3xl mx-auto p-6">
             <div className="flex items-start justify-between mb-6">
                 <div>
-                    <h1 className="text-2xl font-bold">{task.title} {task.project_name ? `- ${task_project_name}` : ''}</h1>
+                    <h1 className="text-2xl font-bold">{task.title} {task.project_name ? `- ${task.project_name}` : ''}</h1>
                     <p className="text-sm text-gray-500 mt-1">Créée le {formatDate(task.created_at)}</p>
                 </div>
 
