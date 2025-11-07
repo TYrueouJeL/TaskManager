@@ -1,6 +1,6 @@
 import App from './App.tsx'
 import './index.css'
-import {createBrowserRouter, RouterProvider} from "react-router";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import ReactDOM from "react-dom/client";
 import {StrictMode} from "react";
 import Home from "./routes/Home.tsx";

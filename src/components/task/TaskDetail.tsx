@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import {Link, useNavigate, useParams} from 'react-router';
+import {Link, useNavigate, useParams} from "react-router";
 import {RiCheckLine, RiDeleteBinLine, RiEditLine, RiTimeLine} from 'react-icons/ri';
 import {deleteTask, getTask, validateTask, getProjectByTask} from "../../services/api.ts";
 import {FaCheck} from "react-icons/fa6";

@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router";
+import { useLoaderData } from "react-router-dpù";
 import TaskDetail from "../../components/task/TaskDetail.tsx";
 import {getTask} from "../../services/api.ts";
 import {useEffect, useState} from "react";
