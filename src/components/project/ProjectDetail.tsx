@@ -206,7 +206,6 @@ export default function ProjectDetail() {
                                     </div>
 
                                     <div className="flex items-center gap-2">
-                                        {overdue && <span className="project-detail__overdue-badge">En retard</span>}
                                         <Link to={`/task/edit/${task.id}`} className="project-detail__link" title="Éditer">
                                             <RiEditLine />
                                         </Link>
