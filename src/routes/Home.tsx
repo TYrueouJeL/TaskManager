@@ -33,11 +33,11 @@ export default function Home() {
     const projectCount = projects.length;
 
     const getTaskStatus = (t: Task) => {
-        if (t.validationDate || t.completed) return 'Terminée';
+        if (t.validationDate) return 'Terminée';
         if (!t.dueDate) return 'Sans date';
         const due = new Date(t.dueDate).getTime();
         const now = Date.now();
-        return due < now ? 'En retard' : 'En cours';
+        return due == now ? "Aujourd'hui" : due < now ? 'En retard' : 'En cours';
     };
 
     const upcomingTasks = tasks
