@@ -1,6 +1,6 @@
 import {supabase} from "../supabase/supabaseClient.ts";
 import { FcGoogle } from "react-icons/fc";
-import { FaDiscord } from "react-icons/fa";
+import {FaDiscord, FaGithub} from "react-icons/fa";
 
 export default function Login() {
     return (
@@ -27,6 +27,17 @@ export default function Login() {
             >
                 <FaDiscord />
                 <span className="font-medium">Se connecter avec Discord</span>
+            </button>
+            <button
+                type={"button"}
+                onClick={() =>
+                    supabase.auth.signInWithOAuth({ provider: 'github', options: { redirectTo: window.location.origin } })
+                }
+                aria-label="Se connecter avec GitHub"
+                className="flex items-center gap-3 px-5 py-2.5 rounded-lg bg-gray-800 text-white border border-transparent shadow-sm hover:shadow-md transition transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+            >
+                <FaGithub />
+                <span className="font-medium">Se connecter avec GitHub</span>
             </button>
         </div>
     )
