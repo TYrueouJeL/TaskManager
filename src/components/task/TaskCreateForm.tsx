@@ -56,7 +56,13 @@ export default function TaskCreateForm() {
                         value={description}
                         onChange={setDescription}
                         height={300}
-                        className={"md-editor"}
+                        className="bg-black text-white rounded"
+                        textareaProps={{
+                            className: "bg-black text-white placeholder-gray-400 p-2"
+                        }}
+                        previewOptions={{
+                            className: "bg-gray-900 text-white p-2 rounded"
+                        }}
                     />
                 </div>
             </div>
