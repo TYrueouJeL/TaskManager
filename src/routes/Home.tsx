@@ -84,7 +84,7 @@ export default function Home() {
             <main className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <section className="lg:col-span-1 space-y-6">
                     <div className="grid grid-cols-2 gap-4">
-                        <Link to="/task" className="card-button p-4 flex flex-col">
+                        <Link to="/task/list" className="card-button p-4 flex flex-col">
                             <div className="flex items-center gap-3">
                                 <RiCheckboxCircleLine className="text-2xl text-green-500" />
                                 <div>
@@ -95,7 +95,7 @@ export default function Home() {
                             <p className="text-xs text-gray-400 mt-2">À faire / complétées</p>
                         </Link>
 
-                        <Link to="/project" className="card-button p-4 flex flex-col">
+                        <Link to="/project/list" className="card-button p-4 flex flex-col">
                             <div className="flex items-center gap-3">
                                 <RiFolderOpenLine className="text-2xl text-blue-500" />
                                 <div>
