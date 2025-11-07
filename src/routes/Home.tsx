@@ -17,7 +17,7 @@ export default function Home() {
 
     return (
         <>
-            {loading ? <div>Loading...</div> : user ? <Connected /> : <Disconected/>}
+            {loading ? null : user ? <Connected /> : <Disconected/>}
         </>
     )
 }
