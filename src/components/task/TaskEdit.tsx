@@ -93,8 +93,8 @@ export default function TaskEdit({ task }: { task: any }) {
                     <label htmlFor="projectId" className="form-label">Projet</label>
                     <select id="projectId" name="projectId" className="form-select">
                         <option value="">Aucun</option>
-                        {projects.map(project => (
-                            <option key={project.id} value={project.id}>{project.title}</option>
+                        {projects && projects.map((project: any) => (
+                            <option key={project.id} value={project.id} selected={project.id === task.project_id}>{project.title}</option>
                         ))}
                     </select>
                 </div>
