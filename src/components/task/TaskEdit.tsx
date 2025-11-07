@@ -72,6 +72,7 @@ export default function TaskEdit({ task }: { task: any }) {
                             value={description}
                             onChange={setDescription}
                             height={300}
+                            className={"md-editor"}
                         />
                     </div>
                 </div>

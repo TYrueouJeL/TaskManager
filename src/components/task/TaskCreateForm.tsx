@@ -56,6 +56,7 @@ export default function TaskCreateForm() {
                         value={description}
                         onChange={setDescription}
                         height={300}
+                        className={"md-editor"}
                     />
                 </div>
             </div>

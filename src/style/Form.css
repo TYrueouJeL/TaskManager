@@ -49,3 +49,11 @@ html.dark .form-textarea {
 html.dark .form-select {
     @apply bg-slate-700 border-slate-600 text-white;
 }
+
+.md-editor {
+    @apply border border-gray-300 rounded;
+}
+
+html.dark .md-editor {
+    @apply border-slate-600 bg-slate-700 text-white;
+}
