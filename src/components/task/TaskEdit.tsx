@@ -1,6 +1,6 @@
 import {type FormEvent, useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router";
-import {updateTask, getProjects} from "../../services/api.ts";
+import {updateTask, getProjects, getTask} from "../../services/api.ts";
 
 export default function TaskEdit({ task }: { task: any }) {
     const [projects, setProjects] = useState(null);
@@ -45,7 +45,7 @@ export default function TaskEdit({ task }: { task: any }) {
     return (
         <>
             <div className="project-detail__header">
-                <h1 className="project-detail__title">Modifier la tache {title}</h1>
+                <h1 className="project-detail__title">Modifier la tache {task.title}</h1>
 
                 <Link to={`/task/${task.id}`} className="project-detail__link">← Retour</Link>
             </div>
@@ -53,38 +53,18 @@ export default function TaskEdit({ task }: { task: any }) {
             <form onSubmit={handleSubmit} className="task-edit-form">
                 <div className="form-group">
                     <label htmlFor="title" className={"form-label"}>Titre</label>
-                    <input
-                        type="text"
-                        id="title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        required
-                        className={"form-input"}
-                    />
+                    <input type="text" id="title" name="title" required className="form-input" />
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="description" className={"form-label"}>Description</label>
-                    <textarea
-                        id="description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        className={"form-textarea"}
-                    />
+                    <label htmlFor="description" className="form-label">Description</label>
+                    <textarea id="description" name="description" className="form-textarea" required/>
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="dueDate" className={"form-label"}>Date d'échéance</label>
-                    <input
-                        type="date"
-                        id="dueDate"
-                        value={dueDate}
-                        onChange={(e) => setDueDate(e.target.value)}
-                        className={"form-input"}
-                    />
+                    <label htmlFor="dueDate" className="form-label">Date d'échéance</label>
+                    <input type="date" id="dueDate" name="dueDate" className="form-input" required/>
                 </div>
-
-
 
                 <div className="form-group">
                     <label htmlFor="projectId" className="form-label">Projet</label>
