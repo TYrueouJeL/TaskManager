@@ -1,9 +1,9 @@
-import {type FormEvent, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router";
-import {updateTask, getProjects, getTask} from "../../services/api.ts";
+import {updateTask, getProjects} from "../../services/api.ts";
 
 export default function TaskEdit({ task }: { task: any }) {
-    const [projects, setProjects] = useState(null);
+    const [projects, setProjects] = useState<Array<{id: string, title: string}>>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -20,23 +20,16 @@ export default function TaskEdit({ task }: { task: any }) {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
-        const FormData = new FormData(event.currentTarget);
-        const title = FormData.get('title') as string;
-        const description = FormData.get('description') as string;
-        const dueDate = FormData.get('dueDate') as string;
-        const projectId = FormData.get('projectId') as string;
+        const formData = new FormData(event.currentTarget);
+        const title = formData.get('title') as string;
+        const description = formData.get('description') as string;
+        const dueDate = formData.get('dueDate') as string;
+        const projectId = formData.get('projectId') as string;
         const project_id = projectId === "" ? null : projectId;
 
-        const taskData = {
-            title,
-            description,
-            dueDate,
-            project_id,
-        };
-        const { error } = await updateTask(task.id, taskData);
+        const { error } = await updateTask(task.id, { title, description, dueDate, project_id });
         if (error) {
-            console.error('Error updating task:', error);
+            console.error("Error updating task:", error);
             return;
         }
         navigate(`/task/${task.id}`);
