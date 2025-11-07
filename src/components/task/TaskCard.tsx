@@ -25,7 +25,7 @@ export default function TaskCard({ task }) {
         fetchProject();
     }, [task.id]);
 
-    const statusColor = isDone ? 'border-green-400' : isOverdue ? 'border-red-400' : 'border-yellow-400';
+    const statusColor = isDone ? 'border-green-400' : isToday ? 'border-blue-400' : isOverdue ? 'border-red-400' : 'border-yellow-400';
     const statusIcon = isDone ? <RiCheckLine className="text-green-500" /> : isToday ? <RiTimeLine className="text-blue-500"/> : isOverdue ? <RiCloseLine className="text-red-500" /> : <RiTimeLine className="text-yellow-500" />;
 
     return (
@@ -47,8 +47,8 @@ export default function TaskCard({ task }) {
                     <span className="card-status-icon">
                         {statusIcon}
                     </span>
-                    <span className={`mt-2 px-2 py-0.5 text-xs rounded-full font-medium ${isDone ? 'bg-green-100 text-green-800' : isOverdue ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                        {isDone ? 'Terminée' : isOverdue ? 'En retard' : 'À faire'}
+                    <span className={`mt-2 px-2 py-0.5 text-xs rounded-full font-medium ${isDone ? 'bg-green-100 text-green-800' : isToday ? 'bg-blue-100 text-blue-800' : isOverdue ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                        {isDone ? 'Terminée' : isToday ? "Aujourd'hui" : isOverdue ? 'En retard' : 'À faire'}
                     </span>
                 </div>
             </article>
