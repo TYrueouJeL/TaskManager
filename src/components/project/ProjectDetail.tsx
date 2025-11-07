@@ -111,13 +111,15 @@ export default function ProjectDetail() {
     if (!project) return <div className="project-detail project-detail__container text-sm text-gray-500">Projet introuvable.</div>;
 
     const now = new Date();
+    const tommorow = new Date(now);
+    tommorow.setDate(tommorow.getDate() + 1);
     const totalTasks = tasks.length;
     const completedTasks = tasks.filter(t => Boolean(t.validationDate)).length;
     const pendingTasks = tasks.filter(t => !t.validationDate).length;
     const overdueTasks = tasks.filter(t => {
         if (t.dueDate && !t.validationDate) {
             const d = new Date(t.dueDate);
-            return !Number.isNaN(d.getTime()) && d < now;
+            return !Number.isNaN(d.getTime()) && d < tommorow;
         }
         return false;
     }).length;
@@ -177,14 +179,19 @@ export default function ProjectDetail() {
                     <ul className="project-detail__task-list">
                         {tasks.map(task => {
                             const done = Boolean(task.validationDate);
+                            const today = !done && task.dueDate && (() => {
+                                const d = new Date(task.dueDate!);
+                                return !Number.isNaN(d.getTime()) && d >= now && d < tommorow;
+                            })
                             const overdue = !done && task.dueDate && (() => {
                                 const d = new Date(task.dueDate!);
-                                return !Number.isNaN(d.getTime()) && d < now;
+                                return !Number.isNaN(d.getTime()) && d < tommorow;
                             })();
 
                             const itemClass = [
                                 'project-detail__task-item',
                                 done ? 'project-detail__task-done' : '',
+                                today ? 'project-detail__task-today' : '',
                                 overdue ? 'project-detail__task-overdue' : ''
                             ].join(' ').trim();
 

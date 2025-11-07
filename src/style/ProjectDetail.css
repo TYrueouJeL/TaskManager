@@ -206,6 +206,11 @@
     color: var(--accent-danger);
     font-weight: 600;
 }
+.project-detail__task-today .project-detail__task-due,
+.project-detail__task-today .project-detail__overdue-badge {
+    color: var(--accent-warn);
+    font-weight: 600;
+}
 .project-detail__overdue-badge {
     font-size: 0.75rem;
     margin-right: 0.5rem;

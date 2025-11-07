@@ -7,14 +7,17 @@ export default function TaskCard({ task }) {
     const [project, setProject] = useState(null);
     const due = new Date(task.dueDate);
     const now = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(now.getDate() + 1);
     const isDone = task.validationDate != null;
-    const isOverdue = !isDone && due < now;
+    const isToday = !isDone && due.toDateString() === now.toDateString();
+    const isOverdue = !isDone && due < tomorrow;
 
     useEffect(() => {
         async function fetchProject() {
             const { data, error } = await getProjectByTask(task.id);
             if (error) {
-                console.error('Error fetching project for task:', error);
+                setProject(null);
             } else {
                 setProject(data);
             }
@@ -23,7 +26,7 @@ export default function TaskCard({ task }) {
     }, [task.id]);
 
     const statusColor = isDone ? 'border-green-400' : isOverdue ? 'border-red-400' : 'border-yellow-400';
-    const statusIcon = isDone ? <RiCheckLine className="text-green-500" /> : isOverdue ? <RiCloseLine className="text-red-500" /> : <RiTimeLine className="text-yellow-500" />;
+    const statusIcon = isDone ? <RiCheckLine className="text-green-500" /> : isToday ? <RiTimeLine className="text-blue-500"/> : isOverdue ? <RiCloseLine className="text-red-500" /> : <RiTimeLine className="text-yellow-500" />;
 
     return (
         <Link to={`/task/${task.id}`} aria-label={`Ouvrir la tâche ${task.title}`}>

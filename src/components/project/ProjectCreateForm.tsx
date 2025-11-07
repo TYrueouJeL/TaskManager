@@ -1,5 +1,5 @@
 import {createProject, getActualUser} from "../../services/api.ts";
-import {useState, useEffect} from "react";
+import {useState} from "react";
 import {useNavigate} from "react-router";
 
 export default function ProjectCreateForm() {
