@@ -14,6 +14,7 @@ export interface Task {
     user_id: string;
     validationDate?: string | null;
     project_id?: string | null;
+    project_name?: string | null;
     created_at?: string | null;
 }
 

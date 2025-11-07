@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {Link, useNavigate, useParams} from "react-router";
 import {RiCheckLine, RiDeleteBinLine, RiEditLine, RiTimeLine} from 'react-icons/ri';
-import {deleteTask, getTask, validateTask, getProjectByTask} from "../../services/api.ts";
+import {deleteTask, getTask, validateTask} from "../../services/api.ts";
 import {FaCheck} from "react-icons/fa6";
 
 function formatDate(iso?: string | null) {
@@ -15,7 +15,6 @@ export default function TaskDetail() {
     const { id } = useParams<{ id: string }>();
 
     const [task, setTask] = useState(null);
-    const [project, setProject] = useState(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
@@ -30,13 +29,6 @@ export default function TaskDetail() {
                 return;
             }
             setTask(taskData);
-
-            const { data: projectData, error: projectError } = await getProjectByTask(id!);
-            if (projectError) {
-                setProject(null);
-            } else {
-                setProject(projectData);
-            }
 
             setLoading(false);
         }
@@ -78,7 +70,7 @@ export default function TaskDetail() {
         <div className="max-w-3xl mx-auto p-6">
             <div className="flex items-start justify-between mb-6">
                 <div>
-                    <h1 className="text-2xl font-bold">{task.title} {project ? `- ${project.title}` : ''}</h1>
+                    <h1 className="text-2xl font-bold">{task.title} {task.project_name ? `- ${task_project_name}` : ''}</h1>
                     <p className="text-sm text-gray-500 mt-1">Créée le {formatDate(task.created_at)}</p>
                 </div>
 

@@ -140,7 +140,7 @@ export default function Home() {
                                                     {task.title ?? 'Sans titre'}
                                                 </p>
                                                 <div className="card-subtitle">
-                                                    {task.projectName ? `${task.projectName} • ` : ''}
+                                                    {task.project_name ? `${task.project_name} • ` : ''}
                                                     {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Pas de date'}
                                                 </div>
                                             </div>
