@@ -33,7 +33,7 @@ export default function TaskDetail() {
 
             const { data: projectData, error: projectError } = await getProjectByTask(id!);
             if (projectError) {
-                setError('Erreur lors du chargement du projet associé.');
+                setProject(null);
             } else {
                 setProject(projectData);
             }
