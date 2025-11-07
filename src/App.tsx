@@ -11,11 +11,10 @@ function App() {
     const navigate = useNavigate();
 
     const handleSignOut = async () => {
-        navigate("/");
         await supabase.auth.signOut();
         setUser(null);
         setMenuOpen(false);
-        navigate(0);
+        navigate("/");
     };
 
     useEffect(() => {

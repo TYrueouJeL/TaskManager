@@ -9,6 +9,14 @@ export async function getProject(id: string) {
     return supabase.from<Project>('project').select('*').eq('id', id).single();
 }
 
+export async function getProjectByTask(taskId: string) {
+    return supabase
+        .from<Project>('project')
+        .select('*, task!inner(id)')
+        .eq('task.id', taskId)
+        .single();
+}
+
 export async function createProject(payload: Partial<Project>) {
     return supabase.from<Project>('project').insert(payload).single();
 }

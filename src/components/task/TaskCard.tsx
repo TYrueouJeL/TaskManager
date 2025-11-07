@@ -1,11 +1,26 @@
 import { Link } from 'react-router';
 import { RiCheckLine, RiCloseLine, RiTimeLine } from 'react-icons/ri';
+import {getProjectByTask} from "../../services/api.ts";
+import {useEffect, useState} from "react";
 
 export default function TaskCard({ task }) {
+    const [project, setProject] = useState(null);
     const due = new Date(task.dueDate);
     const now = new Date();
     const isDone = task.validationDate != null;
     const isOverdue = !isDone && due < now;
+
+    useEffect(() => {
+        async function fetchProject() {
+            const { data, error } = await getProjectByTask(task.id);
+            if (error) {
+                console.error('Error fetching project for task:', error);
+            } else {
+                setProject(data);
+            }
+        }
+        fetchProject();
+    }, [task.id]);
 
     const statusColor = isDone ? 'border-green-400' : isOverdue ? 'border-red-400' : 'border-yellow-400';
     const statusIcon = isDone ? <RiCheckLine className="text-green-500" /> : isOverdue ? <RiCloseLine className="text-red-500" /> : <RiTimeLine className="text-yellow-500" />;
@@ -18,7 +33,7 @@ export default function TaskCard({ task }) {
             >
                 <div className="flex-1 min-w-0">
                     <h3 className="card-title">
-                        {task.title}
+                        {task.title} {project ? `- ${project.title}` : ''}
                     </h3>
                     <p className="card-subtitle">
                         Date limite : {due.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })}

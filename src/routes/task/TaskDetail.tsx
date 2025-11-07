@@ -1,13 +1,22 @@
 import { useLoaderData } from "react-router";
 import TaskDetail from "../../components/task/TaskDetail.tsx";
 import {getTask} from "../../services/api.ts";
+import {useEffect, useState} from "react";
 
 export async function loader({ params }) {
-    const { data: task, error } = await getTask(params.id);
+    const [task, setTask] = useState(null);
 
-    if (error) {
-        throw new Response("Task not found", { status: 404 });
-    }
+    useEffect(() => {
+        async function fetchData() {
+            const { data: taskData, error: taskError } = await getTask(params.id);
+            if (taskError) {
+                console.error('Error fetching task:', taskError);
+            } else {
+                setTask(taskData);
+            }
+        }
+        fetchData();
+    }, [params.id]);
 
     return { task };
 }

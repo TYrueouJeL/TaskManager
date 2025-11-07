@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
 import {Link, useNavigate, useParams} from 'react-router';
 import {RiCheckLine, RiDeleteBinLine, RiEditLine, RiTimeLine} from 'react-icons/ri';
-import {deleteTask, getTask} from "../../services/api.ts";
-import {FaCheck, FaCross} from "react-icons/fa6";
-import {validateTask} from "../../services/api.ts";
-import {RxCross2} from "react-icons/rx";
+import {deleteTask, getTask, validateTask, getProjectByTask} from "../../services/api.ts";
+import {FaCheck} from "react-icons/fa6";
 
 function formatDate(iso?: string | null) {
     if (!iso) return '-';
@@ -17,23 +15,32 @@ export default function TaskDetail() {
     const { id } = useParams<{ id: string }>();
 
     const [task, setTask] = useState(null);
+    const [project, setProject] = useState(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        async function fetchTask() {
+        async function fetchData() {
             setLoading(true);
-            setError(null);
-            const { data, error } = await getTask(id!);
-            if (error) {
+            const { data: taskData, error: taskError } = await getTask(id!);
+            if (taskError) {
                 setError('Erreur lors du chargement de la tâche.');
-            } else {
-                setTask(data);
+                setLoading(false);
+                return;
             }
+            setTask(taskData);
+
+            const { data: projectData, error: projectError } = await getProjectByTask(id!);
+            if (projectError) {
+                setError('Erreur lors du chargement du projet associé.');
+            } else {
+                setProject(projectData);
+            }
+
             setLoading(false);
         }
-        fetchTask();
+        fetchData();
     }, [id]);
 
     const handleValidate = async () => {
@@ -71,7 +78,7 @@ export default function TaskDetail() {
         <div className="max-w-3xl mx-auto p-6">
             <div className="flex items-start justify-between mb-6">
                 <div>
-                    <h1 className="text-2xl font-bold">{task.title}</h1>
+                    <h1 className="text-2xl font-bold">{task.title} {project.title}</h1>
                     <p className="text-sm text-gray-500 mt-1">Créée le {formatDate(task.created_at)}</p>
                 </div>
 
