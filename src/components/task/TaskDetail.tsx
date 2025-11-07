@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import {Link, useNavigate, useParams} from "react-router";
 import {RiCheckLine, RiDeleteBinLine, RiEditLine, RiTimeLine} from 'react-icons/ri';
-import {deleteTask, getTask, validateTask} from "../../services/api.ts";
-import {FaCheck} from "react-icons/fa6";
+import {deleteTask, getTask, unvalidateTask, validateTask} from "../../services/api.ts";
+import {FaCheck, FaX} from "react-icons/fa6";
 
 function formatDate(iso?: string | null) {
     if (!iso) return '-';
@@ -47,6 +47,18 @@ export default function TaskDetail() {
         navigate(0);
     }
 
+    const handleUnValidate = async () => {
+        if (!task) return;
+        setLoading(true);
+        const { data, error } = await unvalidateTask(task.id);
+        if (error) {
+            setError('Erreur lors de l\'annulation de la validation de la tâche.');
+        } else {
+            setTask(data);
+        }
+        navigate(0);
+    }
+
     const handleDelete = async () => {
         if (!task) return;
         setLoading(true);
@@ -80,10 +92,13 @@ export default function TaskDetail() {
                     </Link>
 
                     {task.validationDate == null ? (
-                        <button className="text-green-500 cursor-pointer" onClick={handleValidate}>
+                        <button className="text-green-500 cursor-pointer" onClick={handleValidate} title="Valider la tâche">
                             <FaCheck />
                         </button>
-                        ) : null
+                        ) :
+                        <button className="text-red-500 cursor-pointer" onClick={handleUnValidate} title="Annuler la validation">
+                            <FaX />
+                        </button>
                     }
 
                     <button className="text-red-500 cursor-pointer" onClick={handleDelete} title="Supprimer">

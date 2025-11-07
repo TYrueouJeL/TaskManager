@@ -4,7 +4,6 @@ import { supabase } from "./supabase/supabaseClient.ts";
 import type { User } from "@supabase/supabase-js";
 import ThemeToggle from "./components/ThemeToggle.tsx";
 import { Menu, X } from "lucide-react";
-import useMatomoTagManager from "./useMatomoTagManager.ts";
 
 function App() {
     const [user, setUser] = useState<User | null>(null);
@@ -29,8 +28,6 @@ function App() {
             authListener?.subscription?.unsubscribe();
         };
     }, []);
-
-    useMatomoTagManager();
 
     return (
         <>

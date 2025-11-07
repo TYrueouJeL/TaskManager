@@ -53,6 +53,10 @@ export async function validateTask(id: string) {
     return supabase.from<Task>('task').update({ validationDate: new Date().toISOString() }).eq('id', id).single();
 }
 
+export async function unvalidateTask(id: string) {
+    return supabase.from<Task>('task').update({ validationDate: null }).eq('id', id).single();
+}
+
 export async function deleteTask(id: string) {
     return supabase.from<Task>('task').delete().eq('id', id).single();
 }
