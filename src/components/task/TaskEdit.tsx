@@ -1,19 +1,41 @@
-import {type FormEvent, useState} from "react";
+import {type FormEvent, useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router";
-import {updateTask} from "../../services/api.ts";
+import {updateTask, getProjectByTask} from "../../services/api.ts";
 
 export default function TaskEdit({ task }: { task: any }) {
     const [title, setTitle] = useState(task.title);
     const [description, setDescription] = useState(task.description);
     const [dueDate, setDueDate] = useState(task.dueDate ? task.dueDate.split('T')[0] : '');
+    const [projects, setProjects] = useState(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        async function fetchProject() {
+            const { data: projectData, error } = await getProjectByTask(task.id);
+            if (error) {
+                console.error('Error fetching project:', error);
+                return;
+            }
+            setProjects(projectData);
+        }
+        fetchProject();
+    }, [task.id]);
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+
+        const FormData = new FormData(e.currentTarget as HTMLFormElement);
+        const title = FormData.get('title') as string;
+        const description = FormData.get('description') as string;
+        const dueDate = FormData.get('dueDate') as string;
+        const projectId = FormData.get('projectId') as string;
+        const project_id = projectId === "" ? null : projectId;
+
         const taskData = {
             title,
             description,
             dueDate,
+            project_id,
         };
         const { error } = await updateTask(task.id, taskData);
         if (error) {
@@ -63,6 +85,18 @@ export default function TaskEdit({ task }: { task: any }) {
                         onChange={(e) => setDueDate(e.target.value)}
                         className={"form-input"}
                     />
+                </div>
+
+
+
+                <div className="form-group">
+                    <label htmlFor="projectId" className="form-label">Projet</label>
+                    <select id="projectId" name="projectId" className="form-select">
+                        <option value="">Aucun</option>
+                        {projects.map(project => (
+                            <option key={project.id} value={project.id}>{project.title}</option>
+                        ))}
+                    </select>
                 </div>
 
                 <button type="submit" className="form-submit">Enregistrer les modifications</button>
