@@ -1,6 +1,6 @@
 import {type FormEvent, useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router";
-import {updateTask, getProjectByTask} from "../../services/api.ts";
+import {updateTask, getProjects} from "../../services/api.ts";
 
 export default function TaskEdit({ task }: { task: any }) {
     const [title, setTitle] = useState(task.title);
@@ -11,7 +11,7 @@ export default function TaskEdit({ task }: { task: any }) {
 
     useEffect(() => {
         async function fetchProject() {
-            const { data: projectData, error } = await getProjectByTask(task.id);
+            const { data: projectData, error } = await getProjects();
             if (error) {
                 console.error('Error fetching project:', error);
                 return;
@@ -21,10 +21,10 @@ export default function TaskEdit({ task }: { task: any }) {
         fetchProject();
     }, [task.id]);
 
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
-        const FormData = new FormData(e.currentTarget as HTMLFormElement);
+        const FormData = new FormData(event.currentTarget);
         const title = FormData.get('title') as string;
         const description = FormData.get('description') as string;
         const dueDate = FormData.get('dueDate') as string;
@@ -93,8 +93,8 @@ export default function TaskEdit({ task }: { task: any }) {
                     <label htmlFor="projectId" className="form-label">Projet</label>
                     <select id="projectId" name="projectId" className="form-select">
                         <option value="">Aucun</option>
-                        {projects && projects.map((project: any) => (
-                            <option key={project.id} value={project.id} selected={project.id === task.project_id}>{project.title}</option>
+                        {projects.map(project => (
+                            <option key={project.id} value={project.id}>{project.title}</option>
                         ))}
                     </select>
                 </div>
