@@ -118,7 +118,7 @@ export default function TaskDetail() {
                     <div className="text-sm text-gray-500">Échéance : {formatDate(task.dueDate)}</div>
                 </div>
 
-                <div className="prose prose-slate max-w-none">
+                <div className="task-detail-description prose max-w-none">
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                         {task.description || "*Aucune description*"}
                     </ReactMarkdown>

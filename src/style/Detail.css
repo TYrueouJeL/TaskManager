@@ -9,3 +9,11 @@ html.dark .article {
 .article-state {
     @apply flex items-center gap-1 p-2 border rounded-lg mb-4;
 }
+
+.task-detail-description {
+    @apply prose prose-sm sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl;
+}
+
+html.dark .task-detail-description {
+    @apply prose-invert;
+}
