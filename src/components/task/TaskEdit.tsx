@@ -3,20 +3,17 @@ import {Link, useNavigate} from "react-router";
 import {updateTask, getProjects} from "../../services/api.ts";
 
 export default function TaskEdit({ task }: { task: any }) {
-    const [title, setTitle] = useState(task.title);
-    const [description, setDescription] = useState(task.description);
-    const [dueDate, setDueDate] = useState(task.dueDate ? task.dueDate.split('T')[0] : '');
     const [projects, setProjects] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchProject() {
-            const { data: projectData, error } = await getProjects();
+            const { data, error } = await getProjects();
             if (error) {
                 console.error('Error fetching project:', error);
                 return;
             }
-            setProjects(projectData);
+            setProjects(data || []);
         }
         fetchProject();
     }, [task.id]);

@@ -5,8 +5,6 @@ import {useNavigate} from "react-router";
 
 export default function TaskCreateForm() {
     const [projects, setProjects] = useState<Array<{id: string, title: string}>>([]);
-    const [loading , setLoading] = useState(false);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
