@@ -3,6 +3,8 @@ import {Link, useNavigate, useParams} from "react-router";
 import {RiCheckLine, RiDeleteBinLine, RiEditLine, RiTimeLine} from 'react-icons/ri';
 import {deleteTask, getTask, unvalidateTask, validateTask} from "../../services/api.ts";
 import {FaCheck, FaX} from "react-icons/fa6";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 function formatDate(iso?: string | null) {
     if (!iso) return '-';
@@ -116,8 +118,10 @@ export default function TaskDetail() {
                     <div className="text-sm text-gray-500">Échéance : {formatDate(task.dueDate)}</div>
                 </div>
 
-                <div className="prose max-w-none">
-                    <p>{task.description}</p>
+                <div className="prose prose-slate max-w-none">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {task.description || "*Aucune description*"}
+                    </ReactMarkdown>
                 </div>
             </div>
         </div>

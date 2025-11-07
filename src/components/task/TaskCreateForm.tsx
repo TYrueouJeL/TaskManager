@@ -47,7 +47,7 @@ export default function TaskCreateForm() {
             </div>
 
             <div className="form-group">
-                <label htmlFor="description" className="form-label">Description</label>
+                <label htmlFor="description" className="form-label">Description (Markdown accepté)</label>
                 <textarea id="description" name="description" className="form-textarea" required/>
             </div>
 
