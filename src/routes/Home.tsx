@@ -141,8 +141,9 @@ export default function Home() {
                                                 <div className="text-sm text-gray-400">{task.priority ?? ''}</div>
                                                 <span className={`text-xs font-medium px-2 py-1 rounded-full ${
                                                     status === 'Terminée' ? 'bg-green-100 text-green-700' :
-                                                        status === 'En retard' ? 'bg-red-100 text-red-700' :
-                                                            'bg-yellow-100 text-yellow-700'
+                                                        status === "Aujourd'hui" ? 'bg-blue-100 text-blue-700' :
+                                                            status === 'En retard' ? 'bg-red-100 text-red-700' :
+                                                                'bg-yellow-100 text-yellow-700'
                                                 }`}>
                                                     {status}
                                                 </span>
