@@ -1,0 +1,87 @@
+.disconnected-container {
+    @apply min-h-screen flex flex-col
+}
+
+.disconnected-hero {
+    @apply flex flex-col items-center justify-center text-center py-20 px-6
+}
+
+.disconnected-h1 {
+    @apply text-4xl md:text-6xl font-extrabold mb-4
+}
+
+html.dark .disconnected-h1 {
+    @apply text-white
+}
+
+.diconnected-p {
+    @apply text-gray-600 max-w-2xl mb-8
+}
+
+html.dark .disconnected-p {
+    @apply text-gray-300
+}
+
+.disconnected-button {
+    @apply flex items-center gap-2 px-5 py-3 text-lg border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-50
+}
+
+html.dark .disconnected-button {
+    @apply bg-slate-900 text-white hover:bg-purple-800 border-purple-700
+}
+
+.disconnected-features {
+    @apply flex-grow py-16 px-6
+}
+
+.features-header {
+    @apply max-w-6xl mx-auto text-center mb-12
+}
+
+.features-grid {
+    @apply grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto
+}
+
+.feature-card {
+    @apply  p-6 flex flex-col items-center text-center
+}
+
+.feature-card-title {
+    @apply font-semibold text-lg mb-2
+}
+
+html.dark .feature-title {
+    @apply text-white
+}
+
+.feature-card-description {
+    @apply text-gray-500 text-sm
+}
+
+html.dark .feature-card-description {
+    @apply text-gray-400
+}
+
+.disconnected-cta {
+    @apply py-16 px-6 text-center
+}
+
+.disconnected-cta-title {
+    @apply text-2xl md:text-3xl font-bold mb-4
+}
+
+.disconnected-cta-description {
+    @apply text-gray-600 mb-6
+}
+
+html.dark .disconnected-cta-description {
+    @apply text-gray-300
+}
+
+.disconnected-cta-button {
+    @apply   flex items-center gap-2 mx-auto w-fit px-5 py-3 text-lg border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-50
+}
+
+html.dark .disconnected-cta-button {
+    @apply bg-slate-900 text-white hover:bg-purple-800 border-purple-700
+}
