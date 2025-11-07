@@ -5,6 +5,7 @@ import {useNavigate} from "react-router";
 
 export default function TaskCreateForm() {
     const [projects, setProjects] = useState<Array<{id: string, title: string}>>([]);
+    const [loading , setLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,6 +22,7 @@ export default function TaskCreateForm() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setLoading(true);
         const formData = new FormData(event.currentTarget);
         const title = formData.get('title') as string;
         const description = formData.get('description') as string;
@@ -64,7 +66,9 @@ export default function TaskCreateForm() {
                 </select>
             </div>
 
-            <button type="submit" className="form-button">Créer la Tâche</button>
+            <button type="submit" className="form-button" disabled={loading}>
+                {loading ? 'Création…' : 'Créer la tâche'}
+            </button>
         </form>
     );
 }
