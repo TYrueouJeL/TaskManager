@@ -84,7 +84,7 @@ export default function Home() {
                 <p className="disconnected-cta-description">
                     Rejoignez des centaines d’utilisateurs qui gèrent mieux leur quotidien grâce à notre application.
                 </p>
-                <Link to="/register" className="disconnected-cta-button">
+                <Link to="/login" className="disconnected-cta-button">
                     <RiRocketLine /> S’inscrire gratuitement
                 </Link>
             </section>
