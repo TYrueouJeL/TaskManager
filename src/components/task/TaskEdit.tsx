@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { updateTask, getProjects } from "../../services/api.ts";
+import MDEditor from "@uiw/react-md-editor";
 
 export default function TaskEdit({ task }: { task: any }) {
     const [title, setTitle] = useState(task.title || "");
-    const [description, setDescription] = useState(task.description || "");
+    const [description, setDescription] = useState(task.description || ""); // Markdown
     const [dueDate, setDueDate] = useState(task.dueDate ? task.dueDate.split("T")[0] : "");
     const [projectId, setProjectId] = useState(task.project_id || task.projectId || "");
     const [projects, setProjects] = useState<Array<{ id: string; title: string }>>([]);
@@ -28,7 +29,7 @@ export default function TaskEdit({ task }: { task: any }) {
 
         const taskData = {
             title,
-            description,
+            description, // Markdown
             dueDate,
             project_id: projectId === "" ? null : projectId,
         };
@@ -63,16 +64,16 @@ export default function TaskEdit({ task }: { task: any }) {
                     />
                 </div>
 
+                {/* Éditeur Markdown */}
                 <div className="form-group">
-                    <label htmlFor="description" className="form-label">Description</label>
-                    <textarea
-                        id="description"
-                        name="description"
-                        className="form-textarea"
-                        required
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
+                    <label htmlFor="description" className="form-label">Description (Markdown accepté)</label>
+                    <div className="border rounded">
+                        <MDEditor
+                            value={description}
+                            onChange={setDescription}
+                            height={300}
+                        />
+                    </div>
                 </div>
 
                 <div className="form-group">
