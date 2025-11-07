@@ -17,3 +17,11 @@ html.dark .article {
 html.dark .task-detail-description {
     @apply prose-invert;
 }
+
+.task-detail-description p {
+    @apply mb-4;
+}
+
+html.dark .task-detail-description p {
+    @apply text-gray-300;
+}
