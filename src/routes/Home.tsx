@@ -5,16 +5,19 @@ import {useState} from "react";
 
 export default function Home() {
     const [user, setUser] = useState(null)
-    // vérifier la connexion de l'utilisateur
+    const [loading, setLoading] = useState(true)
+
     getActualUser().then((data) => {
         setUser(data)
+        setLoading(false)
     }).catch((error) => {
         console.log(error)
+        setLoading(false)
     })
 
     return (
         <>
-            {user ? <Connected /> : <Disconected/>}
+            {loading ? <div>Loading...</div> : user ? <Connected /> : <Disconected/>}
         </>
     )
 }
