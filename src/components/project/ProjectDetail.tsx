@@ -198,7 +198,7 @@ export default function ProjectDetail() {
                             return (
                                 <li to={`/task/${task.id}`} key={task.id} className={itemClass} tabIndex={0}>
                                     <div className="project-detail__task-info">
-                                        {done ? <RiCheckLine className="project-detail__icon--done" /> : <RiTimeLine className="project-detail__icon--pending" />}
+                                        {done ? <RiCheckLine className="project-detail__icon--done" /> : today ? <RiTimeLine className="project-detail__icon--info"/> : <RiTimeLine className="project-detail__icon--pending" />}
                                         <div>
                                             <div className="project-detail__task-title">{task.title}</div>
                                             <div className="project-detail__task-due">Échéance : {formatDate(task.dueDate)}</div>
