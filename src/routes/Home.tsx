@@ -35,8 +35,8 @@ export default function Home() {
     const getTaskStatus = (t: Task) => {
         if (t.validationDate) return 'Terminée';
         if (!t.dueDate) return 'Sans date';
-        const due = new Date(t.dueDate).getTime();
-        const now = Date.now();
+        const due = new Date(t.dueDate);
+        const now = new Date();
         return due == now ? "Aujourd'hui" : due < now ? 'En retard' : 'En cours';
     };
 
