@@ -1,6 +1,5 @@
 import { Link } from 'react-router';
 import { RiCheckLine, RiCloseLine, RiTimeLine } from 'react-icons/ri';
-import {useEffect, useState} from "react";
 
 export default function TaskCard({ task }) {
     const due = new Date(task.dueDate);
