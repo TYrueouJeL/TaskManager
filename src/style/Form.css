@@ -57,3 +57,43 @@ html.dark .form-select {
 html.dark .md-editor {
     @apply border-slate-600 bg-slate-700 text-white;
 }
+
+.login-form {
+    @apply flex flex-col gap-3 w-full max-w-sm p-6 bg-white rounded-xl shadow-md border border-gray-200
+}
+
+html.dark .login-form {
+    @apply bg-slate-800 border-slate-600 text-white;
+}
+
+.login-form-title {
+    @apply text-xl font-semibold text-center mb-2
+}
+
+.login-form-input {
+    @apply px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400
+}
+
+html.dark .login-form-input {
+    @apply border-slate-600 text-white;
+}
+
+.login-form-submit {
+    @apply mt-2 px-4 py-2 rounded-lg bg-green-500 text-white font-medium hover:bg-green-600 disabled:opacity-50 transition
+}
+
+html.dark .login-form-submit {
+    @apply bg-indigo-600 hover:bg-indigo-700
+}
+
+.login-form-text {
+    @apply text-sm text-center mt-2
+}
+
+.login-form-link {
+    @apply text-green-500 hover:underline
+}
+
+html.dark .login-form-link {
+    @apply text-indigo-600
+}

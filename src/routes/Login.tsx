@@ -49,9 +49,9 @@ export default function Login() {
             {/* --- Formulaire Email / Password --- */}
             <form
                 onSubmit={handleAuth}
-                className="flex flex-col gap-3 w-full max-w-sm p-6 bg-white rounded-xl shadow-md border border-gray-200"
+                className="login-form"
             >
-                <h2 className="text-xl font-semibold text-center mb-2">
+                <h2 className="login-form-title">
                     {mode === "login" ? "Connexion par email" : "Créer un compte"}
                 </h2>
 
@@ -61,7 +61,7 @@ export default function Login() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                    className="login-form-input"
                 />
                 <input
                     type="password"
@@ -69,13 +69,13 @@ export default function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                    className="login-form-input"
                 />
 
                 <button
                     type="submit"
                     disabled={loading}
-                    className="mt-2 px-4 py-2 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 disabled:opacity-50 transition"
+                    className="login-form-submit"
                 >
                     {loading
                         ? "Chargement..."
@@ -84,14 +84,14 @@ export default function Login() {
                             : "S'inscrire"}
                 </button>
 
-                <p className="text-sm text-center mt-2">
+                <p className="login-form-text">
                     {mode === "login" ? (
                         <>
                             Pas encore de compte ?{" "}
                             <button
                                 type="button"
                                 onClick={() => setMode("register")}
-                                className="text-indigo-600 hover:underline"
+                                className="login-form-link"
                             >
                                 S'inscrire
                             </button>
@@ -102,7 +102,7 @@ export default function Login() {
                             <button
                                 type="button"
                                 onClick={() => setMode("login")}
-                                className="text-indigo-600 hover:underline"
+                                className="login-form-link"
                             >
                                 Se connecter
                             </button>
