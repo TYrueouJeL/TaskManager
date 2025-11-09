@@ -6,6 +6,7 @@ import {getTasks, getProjects} from "../../services/api.ts";
 
 export default function Home() {
     const [tasks, setTasks] = useState<Task[]>([]);
+    const [dailyTasks, setDailyTasks] = useState<Task[]>([]);
     const [projects, setProjects] = useState<Project[]>([]);
 
     useEffect(() => {
@@ -14,7 +15,10 @@ export default function Home() {
             if (taskError) {
                 console.error('Error fetching tasks:', taskError);
             } else {
-                setTasks(taskData);
+                const filteredTasks = taskData.filter((task: Task) => task.is_daily == false);
+                const filteredDailyTasks = taskData.filter((task: Task) => task.is_daily == true);
+                setTasks(filteredTasks);
+                setDailyTasks(filteredDailyTasks);
             }
 
             const { data: projectData, error: projectError } = await getProjects();
@@ -28,7 +32,7 @@ export default function Home() {
         loadData();
     }, []);
 
-    const taskCount = tasks.length;
+    const taskCount = tasks.length + dailyTasks.length;
     const projectCount = projects.length;
 
     const getTaskStatus = (t: Task) => {
@@ -47,7 +51,7 @@ export default function Home() {
     };
 
     const upcomingTasks = tasks
-        .filter(task => !task.validationDate && !task.completed)
+        .filter(task => !task.validationDate)
         .sort((a, b) => {
             const da = a.dueDate ? new Date(a.dueDate).getTime() : Infinity;
             const db = b.dueDate ? new Date(b.dueDate).getTime() : Infinity;
@@ -55,18 +59,25 @@ export default function Home() {
         })
         .slice(0, 4);
 
+    const upcomingDailyTasks = dailyTasks
+        .filter(task => !task.validationDate)
+        .slice(0, 4);
+
     const ongoingProjects = projects
-        .filter(p => !p.archived)
-        .slice(0, 3);
+        .slice(0, 2);
 
     const projectCompletion = (project: Project) => {
         const pid = project.id;
         const related = tasks.filter(t => {
-            const pId = t.projectId ?? t.project_id;
+            const pId = t.project_id;
             return pId !== undefined && pId !== null && `${pId}` === `${pid}`;
         });
-        const total = related.length || (project.task_count ?? 0) || 0;
-        const done = related.filter(t => t.validationDate || t.completed).length;
+        const relatedDaily = dailyTasks.filter(t => {
+            const pId = t.project_id;
+            return pId !== undefined && pId !== null && `${pId}` === `${pid}`;
+        })
+        const total = related.length + relatedDaily.length;
+        const done = related.filter(t => t.validationDate).length;
         const percent = total === 0 ? 0 : Math.round((done / total) * 100);
         return { total, done, percent };
     };
@@ -120,45 +131,86 @@ export default function Home() {
                 </section>
 
                 <section className="lg:col-span-2 space-y-6">
-                    <div className="card p-4">
-                        <div className="flex items-center justify-between mb-3">
-                            <h2 className="font-semibold text-lg flex items-center gap-2"><RiSearchLine /> Tâches à venir</h2>
-                            <Link to="/task/list" className="text-sm text-blue-600 hover:underline">Voir toutes</Link>
+                    <div className="card p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <div className="flex items-center justify-between mb-3">
+                                <h2 className="font-semibold text-lg flex items-center gap-2"><RiSearchLine /> Tâches à venir</h2>
+                                <Link to="/task/list" className="text-sm text-blue-600 hover:underline">Voir toutes</Link>
+                            </div>
+
+                            {upcomingTasks.length === 0 ? (
+                                <p className="text-sm text-gray-500">Aucune tâche à venir.</p>
+                            ) : (
+                                <ul className="space-y-3">
+                                    {upcomingTasks.map(task => {
+                                        const status = getTaskStatus(task);
+                                        return (
+                                            <Link to={`/task/${task.id}`} key={task.id} className="flex items-center justify-between card-button p-2">
+                                                <div>
+                                                    <p className="card-title">
+                                                        {task.title ?? 'Sans titre'}
+                                                    </p>
+                                                    <div className="card-subtitle">
+                                                        {task.project_name ? `${task.project_name} • ` : ''}
+                                                        {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Pas de date'}
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-3">
+                                                    <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+                                                        status === 'Terminée' ? 'bg-green-100 text-green-700' :
+                                                            status === "Aujourd'hui" ? 'bg-blue-100 text-blue-700' :
+                                                                status === 'En retard' ? 'bg-red-100 text-red-700' :
+                                                                    'bg-yellow-100 text-yellow-700'
+                                                    }`}>
+                                                        {status}
+                                                    </span>
+                                                </div>
+                                            </Link>
+                                        );
+                                    })}
+                                </ul>
+                            )}
                         </div>
 
-                        {upcomingTasks.length === 0 ? (
-                            <p className="text-sm text-gray-500">Aucune tâche à venir.</p>
-                        ) : (
-                            <ul className="space-y-3">
-                                {upcomingTasks.map(task => {
-                                    const status = getTaskStatus(task);
-                                    return (
-                                        <Link to={`/task/${task.id}`} key={task.id} className="flex items-center justify-between">
-                                            <div>
-                                                <p className="card-title">
-                                                    {task.title ?? 'Sans titre'}
-                                                </p>
-                                                <div className="card-subtitle">
-                                                    {task.project_name ? `${task.project_name} • ` : ''}
-                                                    {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Pas de date'}
+                        <div>
+                            <div className="flex items-center justify-between mb-3">
+                                <h2 className="font-semibold text-lg flex items-center gap-2"><RiSearchLine /> Tâches quotidiennes à venir</h2>
+                                <Link to="/task/list" className="text-sm text-blue-600 hover:underline">Voir toutes</Link>
+                            </div>
+
+                            {upcomingDailyTasks.length === 0 ? (
+                                <p className="text-sm text-gray-500">Aucune tâche quotidienne à venir.</p>
+                            ) : (
+                                <ul className="space-y-3">
+                                    {upcomingDailyTasks.map(task => {
+                                        const status = getTaskStatus(task);
+                                        return (
+                                            <Link to={`/task/${task.id}`} key={task.id} className="flex items-center justify-between card-button p-2">
+                                                <div>
+                                                    <p className="card-title">
+                                                        {task.title ?? 'Sans titre'}
+                                                    </p>
+                                                    <div className="card-subtitle">
+                                                        {task.project_name ? `${task.project_name} • ` : ''}
+                                                        {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Pas de date'}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="flex items-center gap-3">
-                                                <div className="text-sm text-gray-400">{task.priority ?? ''}</div>
-                                                <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                                                    status === 'Terminée' ? 'bg-green-100 text-green-700' :
-                                                        status === "Aujourd'hui" ? 'bg-blue-100 text-blue-700' :
-                                                            status === 'En retard' ? 'bg-red-100 text-red-700' :
-                                                                'bg-yellow-100 text-yellow-700'
-                                                }`}>
-                                                    {status}
-                                                </span>
-                                            </div>
-                                        </Link>
-                                    );
-                                })}
-                            </ul>
-                        )}
+                                                <div className="flex items-center gap-3">
+                                                    <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+                                                        status === 'Terminée' ? 'bg-green-100 text-green-700' :
+                                                            status === "Aujourd'hui" ? 'bg-blue-100 text-blue-700' :
+                                                                status === 'En retard' ? 'bg-red-100 text-red-700' :
+                                                                    'bg-yellow-100 text-yellow-700'
+                                                    }`}>
+                                                        {status}
+                                                    </span>
+                                                </div>
+                                            </Link>
+                                        );
+                                    })}
+                                </ul>
+                            )}
+                        </div>
                     </div>
 
                     <div className="card p-4">
@@ -175,7 +227,7 @@ export default function Home() {
                                     const { percent, done, total } = projectCompletion(project);
                                     const name = project.name ?? project.title ?? 'Nom du projet';
                                     return (
-                                        <Link to={`/project/${project.id}`} key={project.id} className="flex items-center justify-between">
+                                        <Link to={`/project/${project.id}`} key={project.id} className="flex items-center justify-between card-button p-2">
                                             <div className="w-3/4">
                                                 <p className="card-title">
                                                     {name}

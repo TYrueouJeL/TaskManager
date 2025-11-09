@@ -28,6 +28,7 @@ export default function ProjectDetail() {
     const [deleting, setDeleting] = useState<boolean>(false);
 
     const [tasks, setTasks] = useState<Task[]>([]);
+    const [dailyTasks, setDailyTasks] = useState<Task[]>([]);
     const [tasksLoading, setTasksLoading] = useState<boolean>(false);
     const [tasksError, setTasksError] = useState<string | null>(null);
 
@@ -66,7 +67,10 @@ export default function ProjectDetail() {
                 const res = await getTasksByProject(id);
                 if (!mounted) return;
                 if (res.error) throw res.error;
-                setTasks(res.data ?? []);
+                const filteredTasks = res.data.filter((task: Task) => task.is_daily == false);
+                const filteredDailyTasks = res.data.filter((task: Task) => task.is_daily == true);
+                setTasks(filteredTasks ?? []);
+                setDailyTasks(filteredDailyTasks ?? []);
             } catch (err: unknown) {
                 const msg = err instanceof Error ? err.message : String(err ?? 'Erreur inconnue');
                 setTasksError(msg);
@@ -169,57 +173,112 @@ export default function ProjectDetail() {
                     </div>
                 </div>
 
-                <div className="project-detail__tasks">
-                    <h2 className="text-lg font-medium mb-3">Tâches</h2>
+                <div className="card grid grid-cols-1 lg:grid-cols-2 gap-3">
+                    <div className="project-detail__tasks">
+                        <h2 className="text-lg font-medium mb-3">Tâches</h2>
 
-                    {tasksLoading && <div className="text-sm text-gray-500">Chargement des tâches…</div>}
-                    {tasksError && <div className="text-sm text-red-600">{tasksError}</div>}
-                    {!tasksLoading && tasks.length === 0 && <div className="text-sm text-gray-500">Aucune tâche pour ce projet.</div>}
+                        {tasksLoading && <div className="text-sm text-gray-500">Chargement des tâches…</div>}
+                        {tasksError && <div className="text-sm text-red-600">{tasksError}</div>}
+                        {!tasksLoading && tasks.length === 0 && <div className="text-sm text-gray-500">Aucune tâche pour ce projet.</div>}
 
-                    <ul className="project-detail__task-list">
-                        {tasks.map(task => {
-                            const done = Boolean(task.validationDate);
-                            const today = !done && task.dueDate && (() => {
-                                const d = new Date(task.dueDate!);
-                                return !Number.isNaN(d.getTime()) && d >= now && d < tommorow;
-                            })
-                            const overdue = !done && task.dueDate && (() => {
-                                const d = new Date(task.dueDate!);
-                                return !Number.isNaN(d.getTime()) && d < tommorow;
-                            })();
+                        <ul className="project-detail__task-list">
+                            {tasks.map(task => {
+                                const done = Boolean(task.validationDate);
+                                const today = !done && task.dueDate && (() => {
+                                    const d = new Date(task.dueDate!);
+                                    return !Number.isNaN(d.getTime()) && d >= now && d < tommorow;
+                                })
+                                const overdue = !done && task.dueDate && (() => {
+                                    const d = new Date(task.dueDate!);
+                                    return !Number.isNaN(d.getTime()) && d < tommorow;
+                                })();
 
-                            const itemClass = [
-                                'project-detail__task-item',
-                                done ? 'project-detail__task-done' : '',
-                                today ? 'project-detail__task-today' : '',
-                                overdue ? 'project-detail__task-overdue' : ''
-                            ].join(' ').trim();
+                                const itemClass = [
+                                    'project-detail__task-item',
+                                    done ? 'project-detail__task-done' : '',
+                                    today ? 'project-detail__task-today' : '',
+                                    overdue ? 'project-detail__task-overdue' : ''
+                                ].join(' ').trim();
 
-                            return (
-                                <li to={`/task/${task.id}`} key={task.id} className={itemClass} tabIndex={0}>
-                                    <div className="project-detail__task-info">
-                                        {done ? <RiCheckLine className="project-detail__icon--done" /> : today ? <RiTimeLine className="project-detail__icon--info"/> : <RiTimeLine className="project-detail__icon--pending" />}
-                                        <div>
-                                            <div className="project-detail__task-title">{task.title}</div>
-                                            <div className="project-detail__task-due">Échéance : {formatDate(task.dueDate)}</div>
+                                return (
+                                    <li to={`/task/${task.id}`} key={task.id} className={itemClass} tabIndex={0}>
+                                        <div className="project-detail__task-info">
+                                            {done ? <RiCheckLine className="project-detail__icon--done" /> : today ? <RiTimeLine className="project-detail__icon--info"/> : <RiTimeLine className="project-detail__icon--pending" />}
+                                            <div>
+                                                <div className="project-detail__task-title">{task.title}</div>
+                                                <div className="project-detail__task-due">Échéance : {formatDate(task.dueDate)}</div>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div className="flex items-center gap-2">
-                                        <Link to={`/task/edit/${task.id}`} className="project-detail__link" title="Éditer">
-                                            <RiEditLine />
-                                        </Link>
-                                        <button onClick={() => handleDeleteTask(task.id)} title="Supprimer">
-                                            <RiDeleteBinLine className="text-red-500 cursor-pointer" />
-                                        </button>
-                                        <Link to={`/task/${task.id}`} title="Détail">
-                                            <FaEye className={"text-blue-500 cursor-pointer"}/>
-                                        </Link>
-                                    </div>
-                                </li>
-                            );
-                        })}
-                    </ul>
+                                        <div className="flex items-center gap-2">
+                                            <Link to={`/task/edit/${task.id}`} className="project-detail__link" title="Éditer">
+                                                <RiEditLine />
+                                            </Link>
+                                            <button onClick={() => handleDeleteTask(task.id)} title="Supprimer">
+                                                <RiDeleteBinLine className="text-red-500 cursor-pointer" />
+                                            </button>
+                                            <Link to={`/task/${task.id}`} title="Détail">
+                                                <FaEye className={"text-blue-500 cursor-pointer"}/>
+                                            </Link>
+                                        </div>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </div>
+
+                    <div className="project-detail__tasks h-min">
+                        <h2 className="text-lg font-medium mb-3">Tâches quotidiennes</h2>
+
+                        {tasksLoading && <div className="text-sm text-gray-500">Chargement des tâches…</div>}
+                        {tasksError && <div className="text-sm text-red-600">{tasksError}</div>}
+                        {!tasksLoading && dailyTasks.length === 0 && <div className="text-sm text-gray-500">Aucune tâche quotidienne pour ce projet.</div>}
+
+                        <ul className="project-detail__task-list">
+                            {dailyTasks.map(task => {
+                                const done = Boolean(task.validationDate);
+                                const today = !done && task.dueDate && (() => {
+                                    const d = new Date(task.dueDate!);
+                                    return !Number.isNaN(d.getTime()) && d >= now && d < tommorow;
+                                })
+                                const overdue = !done && task.dueDate && (() => {
+                                    const d = new Date(task.dueDate!);
+                                    return !Number.isNaN(d.getTime()) && d < tommorow;
+                                })();
+
+                                const itemClass = [
+                                    'project-detail__task-item',
+                                    done ? 'project-detail__task-done' : '',
+                                    today ? 'project-detail__task-today' : '',
+                                    overdue ? 'project-detail__task-overdue' : ''
+                                ].join(' ').trim();
+
+                                return (
+                                    <li to={`/task/${task.id}`} key={task.id} className={itemClass} tabIndex={0}>
+                                        <div className="project-detail__task-info">
+                                            {done ? <RiCheckLine className="project-detail__icon--done" /> : today ? <RiTimeLine className="project-detail__icon--info"/> : <RiTimeLine className="project-detail__icon--pending" />}
+                                            <div>
+                                                <div className="project-detail__task-title">{task.title}</div>
+                                                <div className="project-detail__task-due">Échéance : {formatDate(task.dueDate)}</div>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-2">
+                                            <Link to={`/task/edit/${task.id}`} className="project-detail__link" title="Éditer">
+                                                <RiEditLine />
+                                            </Link>
+                                            <button onClick={() => handleDeleteTask(task.id)} title="Supprimer">
+                                                <RiDeleteBinLine className="text-red-500 cursor-pointer" />
+                                            </button>
+                                            <Link to={`/task/${task.id}`} title="Détail">
+                                                <FaEye className={"text-blue-500 cursor-pointer"}/>
+                                            </Link>
+                                        </div>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

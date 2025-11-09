@@ -2,14 +2,16 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { updateTask, getProjects } from "../../services/api.ts";
 import MDEditor from "@uiw/react-md-editor";
+import {CheckCircle, Circle} from "lucide-react";
 
 export default function TaskEdit({ task }: { task: any }) {
     const [title, setTitle] = useState(task.title || "");
     const [description, setDescription] = useState(task.description || ""); // Markdown
-    const [dueDate, setDueDate] = useState(task.dueDate ? task.dueDate.split("T")[0] : "");
+    const [dueDate, setDueDate] = useState(task.dueDate ? task.dueDate.split("T")[0] : null);
     const [projectId, setProjectId] = useState(task.project_id || task.projectId || "");
     const [projects, setProjects] = useState<Array<{ id: string; title: string }>>([]);
-
+    const [mode, setMode] = useState<"daily" | "notDaily">(task.is_daily ? "daily" : "notDaily");
+    const isDaily = mode === "daily";
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,6 +33,7 @@ export default function TaskEdit({ task }: { task: any }) {
             title,
             description, // Markdown
             dueDate,
+            is_daily: isDaily,
             project_id: projectId === "" ? null : projectId,
         };
 
@@ -66,7 +69,7 @@ export default function TaskEdit({ task }: { task: any }) {
 
                 {/* Éditeur Markdown */}
                 <div className="form-group">
-                    <label htmlFor="description" className="form-label">Description (Markdown accepté)</label>
+                    <label htmlFor="description" className="form-label">Description</label>
                     <div className="border rounded">
                         <MDEditor
                             value={description}
@@ -83,7 +86,7 @@ export default function TaskEdit({ task }: { task: any }) {
                         id="dueDate"
                         name="dueDate"
                         className="form-input"
-                        required
+                        required={mode === "notDaily"}
                         value={dueDate}
                         onChange={(e) => setDueDate(e.target.value)}
                     />
@@ -107,7 +110,29 @@ export default function TaskEdit({ task }: { task: any }) {
                     </select>
                 </div>
 
-                <button type="submit" className="form-submit">
+                <button
+                    type={"button"}
+                    onClick={() => setMode(isDaily ? "notDaily" : "daily")}
+                    className={`${isDaily
+                        ? "button-is-daily"
+                        : "button-is-not-daily"
+                    }`}
+                >
+                    {isDaily ? (
+                        <CheckCircle className={`${isDaily
+                            ? "button-is-daily-icon"
+                            : "button-is-not-daily-icon"
+                        }`} />
+                    ) : (
+                        <Circle className={`${isDaily
+                            ? "button-is-daily-icon"
+                            : "button-is-not-daily-icon"
+                        }`} />
+                    )}
+                    <span>Quotidienne</span>
+                </button>
+
+                <button type="submit" className="form-button">
                     Enregistrer les modifications
                 </button>
             </form>

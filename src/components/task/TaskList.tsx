@@ -7,6 +7,7 @@ export default function TaskList({ tasks }) {
     const [search, setSearch] = useState({ title: "" });
     const [filters, setFilters] = useState({
         hideCompleted: false,
+        hideDaily: true,
         startDate: "",
         endDate: "",
         projectFilter: "all" // all | with | without
@@ -30,6 +31,7 @@ export default function TaskList({ tasks }) {
 
         const matchesSearch = title.includes(searchTitle);
         const matchesCompletion = !filters.hideCompleted || !task.validationDate;
+        const matchesDaily = filters.hideDaily ? !task.is_daily : task.is_daily;
 
         // Dates
         const dueDate = task.dueDate ? new Date(task.dueDate) : null;
@@ -46,7 +48,7 @@ export default function TaskList({ tasks }) {
             (filters.projectFilter === "with" && task.project_id) ||
             (filters.projectFilter === "without" && !task.project_id);
 
-        return matchesSearch && matchesCompletion && matchesDate && matchesProject;
+        return matchesSearch && matchesCompletion && matchesDate && matchesProject && matchesDaily;
     });
 
     const cards = filteredTasks.map((task) => (
@@ -92,6 +94,17 @@ export default function TaskList({ tasks }) {
                                 />
                                 Cacher les tâches validées
                             </label>
+                        </div>
+
+                        <div>
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    setFilters(prev => ({ ...prev, hideDaily: !prev.hideDaily }))
+                                }
+                            >
+                                {filters.hideDaily ? "Tâches" : "Tâches quotidiennes"}
+                            </button>
                         </div>
 
                         {/* 🗓️ Période */}

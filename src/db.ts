@@ -10,8 +10,9 @@ export interface Task {
     id: string;
     title: string;
     description: string;
-    dueDate: string;
+    dueDate?: string | null;
     user_id: string;
+    is_daily?: boolean | null;
     validationDate?: string | null;
     project_id?: string | null;
     project_name?: string | null;

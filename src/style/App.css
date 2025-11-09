@@ -53,3 +53,11 @@ html.dark .title {
 html.dark .header {
     @apply bg-gradient-to-r from-blue-900 to-purple-900 text-gray-200;
 }
+
+.card-button {
+    @apply border border-gray-300 rounded-lg shadow-md;
+}
+
+html.dark .card-button {
+    @apply border-gray-500
+}

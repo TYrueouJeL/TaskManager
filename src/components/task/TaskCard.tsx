@@ -7,8 +7,8 @@ export default function TaskCard({ task }) {
     const tomorrow = new Date();
     tomorrow.setDate(now.getDate() + 1);
     const isDone = task.validationDate != null;
-    const isToday = !isDone && due.toDateString() === now.toDateString();
-    const isOverdue = !isDone && due < now;
+    const isToday = task.dueDate != null && !isDone && due.toDateString() === now.toDateString();
+    const isOverdue = task.dueDate != null && !isDone && due < now;
 
     const statusColor = isDone ? 'border-green-400' : isToday ? 'border-blue-400' : isOverdue ? 'border-red-400' : 'border-yellow-400';
     const statusIcon = isDone ? <RiCheckLine className="text-green-500" /> : isToday ? <RiTimeLine className="text-blue-500"/> : isOverdue ? <RiCloseLine className="text-red-500" /> : <RiTimeLine className="text-yellow-500" />;
@@ -24,8 +24,16 @@ export default function TaskCard({ task }) {
                         {task.title} {task.project_name ? `- ${task.project_name}` : ''}
                     </h3>
                     <p className="card-subtitle">
-                        Date limite : {due.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                        {task.dueDate != null && (() => {
+                            const due = new Date(task.dueDate);
+                            return `Date limite : ${due.toLocaleDateString('fr-FR', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric'
+                            })}`;
+                        })()}
                     </p>
+
                 </div>
 
                 <div className="flex flex-col items-end ml-4">
