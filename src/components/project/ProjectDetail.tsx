@@ -182,7 +182,7 @@ export default function ProjectDetail() {
                 </div>
 
                 <div className="card grid grid-cols-1 lg:grid-cols-2 gap-3">
-                    <div className="project-detail__tasks">
+                    <div className="project-detail__tasks h-min">
                         <h2 className="text-lg font-medium mb-3">Tâches</h2>
 
                         {tasksLoading && <div className="text-sm text-gray-500">Chargement des tâches…</div>}
@@ -209,16 +209,28 @@ export default function ProjectDetail() {
                                 ].join(' ').trim();
 
                                 return (
-                                    <li to={`/task/${task.id}`} key={task.id} className={itemClass} tabIndex={0}>
-                                        <div className="project-detail__task-info">
-                                            {done ? <RiCheckLine className="project-detail__icon--done" /> : today ? <RiTimeLine className="project-detail__icon--info"/> : <RiTimeLine className="project-detail__icon--pending" />}
-                                            <div>
+                                    <li key={task.id} className={itemClass} tabIndex={0}>
+                                        <div className="project-detail__task-info flex items-center gap-2">
+                                            {/* Icône selon l'état */}
+                                            {done ? (
+                                                <RiCheckLine className="project-detail__icon--done flex-shrink-0" />
+                                            ) : today ? (
+                                                <RiTimeLine className="project-detail__icon--info flex-shrink-0" />
+                                            ) : (
+                                                <RiTimeLine className="project-detail__icon--pending flex-shrink-0" />
+                                            )}
+
+                                            {/* Texte avec truncate */}
+                                            <div className="flex-1 min-w-0">
                                                 <div className="project-detail__task-title">{task.title}</div>
-                                                <div className="project-detail__task-due">Échéance : {formatDate(task.dueDate)}</div>
+                                                <div className="project-detail__task-due text-sm text-gray-500">
+                                                    Échéance : {formatDate(task.dueDate)}
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center gap-2">
+                                        {/* Actions */}
+                                        <div className="flex items-center gap-2 mt-2 lg:mt-0">
                                             <Link to={`/task/edit/${task.id}`} className="project-detail__link" title="Éditer">
                                                 <RiEditLine />
                                             </Link>
@@ -226,7 +238,7 @@ export default function ProjectDetail() {
                                                 <RiDeleteBinLine className="text-red-500 cursor-pointer" />
                                             </button>
                                             <Link to={`/task/${task.id}`} title="Détail">
-                                                <FaEye className={"text-blue-500 cursor-pointer"}/>
+                                                <FaEye className="text-blue-500 cursor-pointer" />
                                             </Link>
                                         </div>
                                     </li>
@@ -262,16 +274,28 @@ export default function ProjectDetail() {
                                 ].join(' ').trim();
 
                                 return (
-                                    <li to={`/task/${task.id}`} key={task.id} className={itemClass} tabIndex={0}>
-                                        <div className="project-detail__task-info">
-                                            {done ? <RiCheckLine className="project-detail__icon--done" /> : today ? <RiTimeLine className="project-detail__icon--info"/> : <RiTimeLine className="project-detail__icon--pending" />}
-                                            <div>
+                                    <li key={task.id} className={itemClass} tabIndex={0}>
+                                        <div className="project-detail__task-info flex items-center gap-2">
+                                            {/* Icône selon l'état */}
+                                            {done ? (
+                                                <RiCheckLine className="project-detail__icon--done flex-shrink-0" />
+                                            ) : today ? (
+                                                <RiTimeLine className="project-detail__icon--info flex-shrink-0" />
+                                            ) : (
+                                                <RiTimeLine className="project-detail__icon--pending flex-shrink-0" />
+                                            )}
+
+                                            {/* Texte avec truncate */}
+                                            <div className="flex-1 min-w-0">
                                                 <div className="project-detail__task-title">{task.title}</div>
-                                                <div className="project-detail__task-due">Échéance : {formatDate(task.dueDate)}</div>
+                                                <div className="project-detail__task-due text-sm text-gray-500">
+                                                    Échéance : {formatDate(task.dueDate)}
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center gap-2">
+                                        {/* Actions */}
+                                        <div className="flex items-center gap-2 mt-2 lg:mt-0">
                                             <Link to={`/task/edit/${task.id}`} className="project-detail__link" title="Éditer">
                                                 <RiEditLine />
                                             </Link>
@@ -279,7 +303,7 @@ export default function ProjectDetail() {
                                                 <RiDeleteBinLine className="text-red-500 cursor-pointer" />
                                             </button>
                                             <Link to={`/task/${task.id}`} title="Détail">
-                                                <FaEye className={"text-blue-500 cursor-pointer"}/>
+                                                <FaEye className="text-blue-500 cursor-pointer" />
                                             </Link>
                                         </div>
                                     </li>
