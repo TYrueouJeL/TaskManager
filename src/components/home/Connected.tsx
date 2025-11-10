@@ -20,10 +20,10 @@ export default function Home() {
                 );
                 const filteredDailyTasks: Task[] = taskData.filter((task: Task) => {
                     if (!task.is_daily) return false;
-                    if (!task.dueDate) return false;
+                    if (!task.dueDate) return true;
 
                     const dueDate = new Date(task.dueDate);
-                    return dueDate <= new Date();
+                    return dueDate >= new Date();
                 });
                 setTasks(filteredTasks);
                 setDailyTasks(filteredDailyTasks);
