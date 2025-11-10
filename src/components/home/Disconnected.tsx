@@ -31,11 +31,8 @@ export default function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4, duration: 0.6 }}
                 >
-                    <Link to="/login" className="disconnected-button">
+                    <Link to="/login" className="disconnected-button mt-3">
                         <RiRocketLine /> Commencer maintenant
-                    </Link>
-                    <Link to="/login" className="disconnected-button">
-                        Se connecter
                     </Link>
                 </motion.div>
             </header>
