@@ -6,7 +6,7 @@ import {CheckCircle, Circle} from "lucide-react";
 
 export default function TaskEdit({ task }: { task: any }) {
     const [title, setTitle] = useState(task.title || "");
-    const [description, setDescription] = useState(task.description || ""); // Markdown
+    const [description, setDescription] = useState(task.description || "");
     const [dueDate, setDueDate] = useState(task.dueDate ? task.dueDate.split("T")[0] : null);
     const [projectId, setProjectId] = useState(task.project_id || task.projectId || "");
     const [projects, setProjects] = useState<Array<{ id: string; title: string }>>([]);
@@ -31,7 +31,7 @@ export default function TaskEdit({ task }: { task: any }) {
 
         const taskData = {
             title,
-            description, // Markdown
+            description,
             dueDate,
             is_daily: isDaily,
             project_id: projectId === "" ? null : projectId,
@@ -87,7 +87,7 @@ export default function TaskEdit({ task }: { task: any }) {
                         name="dueDate"
                         className="form-input"
                         value={dueDate}
-                        onChange={(e) => setDueDate(e.target.value)}
+                        onChange={(e) => setDueDate(e.target.value == "" ? null : e.target.value)}
                     />
                 </div>
 
