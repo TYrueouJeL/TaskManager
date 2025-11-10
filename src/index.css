@@ -6,6 +6,7 @@
 @import "./style/ProjectDetail.css";
 @import "./style/Form.css";
 @import "./style/Disconnected.css";
+@import "./style/NotFound.css";
 @plugin "@tailwindcss/typography";
 
 html.dark body {

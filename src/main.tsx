@@ -16,11 +16,13 @@ import TaskEdit, { loader as TaskEditLoader } from "./routes/task/TaskEdit.tsx";
 import TaskCreate from "./routes/task/TaskCreate.tsx";
 import ProjectCreate from "./routes/project/ProjectCreate.tsx";
 import ProjectEdit, { loader as ProjectEditLoader } from "./routes/project/ProjectEdit.tsx";
+import NotFound from "./routes/NotFound.tsx";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <App />,
+        errorElement: <NotFound />,
         children: [
             { path: "/", element: <Home/> },
             { path: "login", element: <Login/> },
@@ -35,7 +37,8 @@ const router = createBrowserRouter([
                     { path: ":id", element: <ProtectedRoute><ProjectDetail/></ProtectedRoute>, loader: ProjectDetailLoader },
                     { path: "edit/:id", element: <ProtectedRoute><ProjectEdit/></ProtectedRoute>, loader: ProjectEditLoader},
                     { path: "create", element: <ProtectedRoute><ProjectCreate/></ProtectedRoute>},
-                ] },
+                ]
+            },
         ]
     }
 ])
