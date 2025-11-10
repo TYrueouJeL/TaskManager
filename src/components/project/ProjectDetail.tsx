@@ -138,7 +138,7 @@ export default function ProjectDetail() {
 
     return (
         <div className="project-detail">
-            <div className="project-detail__container">
+            <div className="">
                 <div className="project-detail__header">
                     <div>
                         <h1 className="project-detail__title">{project.title}</h1>
