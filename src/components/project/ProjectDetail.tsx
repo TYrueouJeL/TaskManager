@@ -67,8 +67,16 @@ export default function ProjectDetail() {
                 const res = await getTasksByProject(id);
                 if (!mounted) return;
                 if (res.error) throw res.error;
-                const filteredTasks = res.data.filter((task: Task) => task.is_daily == false);
-                const filteredDailyTasks = res.data.filter((task: Task) => task.is_daily == true);
+                const filteredTasks: Task[] = res.data.filter(
+                    (task: Task) => task.is_daily === false
+                );
+                const filteredDailyTasks: Task[] = res.data.filter((task: Task) => {
+                    if (!task.is_daily) return false;
+                    if (!task.dueDate) return false;
+
+                    const dueDate = new Date(task.dueDate);
+                    return dueDate <= new Date();
+                });
                 setTasks(filteredTasks ?? []);
                 setDailyTasks(filteredDailyTasks ?? []);
             } catch (err: unknown) {

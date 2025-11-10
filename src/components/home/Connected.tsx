@@ -15,8 +15,16 @@ export default function Home() {
             if (taskError) {
                 console.error('Error fetching tasks:', taskError);
             } else {
-                const filteredTasks = taskData.filter((task: Task) => task.is_daily == false);
-                const filteredDailyTasks = taskData.filter((task: Task) => task.is_daily == true);
+                const filteredTasks: Task[] = taskData.filter(
+                    (task: Task) => task.is_daily === false
+                );
+                const filteredDailyTasks: Task[] = taskData.filter((task: Task) => {
+                    if (!task.is_daily) return false;
+                    if (!task.dueDate) return false;
+
+                    const dueDate = new Date(task.dueDate);
+                    return dueDate <= new Date();
+                });
                 setTasks(filteredTasks);
                 setDailyTasks(filteredDailyTasks);
             }
