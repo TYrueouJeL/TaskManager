@@ -77,7 +77,7 @@ export default function TaskCreateForm() {
 
             <div className="form-group">
                 <label htmlFor="dueDate" className="form-label">Date d'échéance</label>
-                <input type="date" id="dueDate" name="dueDate" className="form-input" required={mode === "notDaily"} />
+                <input type="date" id="dueDate" name="dueDate" className="form-input" />
             </div>
 
             <button

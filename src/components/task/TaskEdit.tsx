@@ -86,7 +86,6 @@ export default function TaskEdit({ task }: { task: any }) {
                         id="dueDate"
                         name="dueDate"
                         className="form-input"
-                        required={mode === "notDaily"}
                         value={dueDate}
                         onChange={(e) => setDueDate(e.target.value)}
                     />
