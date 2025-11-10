@@ -113,7 +113,7 @@ export default function TaskDetail() {
                 <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                         {statusIcon}
-                        <span className="text-sm text-gray-700">{validated ? 'Validée' : 'En cours'}</span>
+                        <span className="text-sm text-gray-700">{validated ? 'Validée' : 'À faire'}</span>
                     </div>
                     <div className="text-sm text-gray-500">Échéance : {formatDate(task.dueDate)}</div>
                 </div>

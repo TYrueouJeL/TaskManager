@@ -55,7 +55,7 @@ export default function Home() {
 
         if (dueDay === nowDay) return "Aujourd'hui";
         if (dueDay < nowDay) return "En retard";
-        return "En cours";
+        return "À faire";
     };
 
     const upcomingTasks = tasks
