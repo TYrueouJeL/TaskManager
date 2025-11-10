@@ -153,24 +153,34 @@ export default function Home() {
                                     {upcomingTasks.map(task => {
                                         const status = getTaskStatus(task);
                                         return (
-                                            <Link to={`/task/${task.id}`} key={task.id} className="flex items-center justify-between card-button p-2">
-                                                <div>
-                                                    <p className="card-title">
-                                                        {task.title ?? 'Sans titre'}
-                                                    </p>
-                                                    <div className="card-subtitle">
+                                            <Link
+                                                to={`/task/${task.id}`}
+                                                key={task.id}
+                                                className="flex items-center justify-between card-button p-2 gap-3"
+                                            >
+                                                {/* Bloc texte avec largeur limitée */}
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="card-title truncate">{task.title ?? 'Sans titre'}</p>
+                                                    <div className="card-subtitle truncate">
                                                         {task.project_name ? `${task.project_name} • ` : ''}
                                                         {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Pas de date'}
                                                     </div>
                                                 </div>
-                                                <div className="flex items-center gap-3">
-                                                    <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                                                        status === 'Terminée' ? 'bg-green-100 text-green-700' :
-                                                            status === "Aujourd'hui" ? 'bg-blue-100 text-blue-700' :
-                                                                status === 'En retard' ? 'bg-red-100 text-red-700' :
-                                                                    'bg-yellow-100 text-yellow-700'
-                                                    }`}>
-                                                        {status}
+
+                                                {/* Statut */}
+                                                <div className="flex-shrink-0">
+                                                    <span
+                                                        className={`text-xs font-medium px-2 py-1 rounded-full ${
+                                                            status === 'Terminée'
+                                                                ? 'bg-green-100 text-green-700'
+                                                                : status === "Aujourd'hui"
+                                                                    ? 'bg-blue-100 text-blue-700'
+                                                                    : status === 'En retard'
+                                                                        ? 'bg-red-100 text-red-700'
+                                                                        : 'bg-yellow-100 text-yellow-700'
+                                                        }`}
+                                                    >
+                                                      {status}
                                                     </span>
                                                 </div>
                                             </Link>
@@ -193,24 +203,34 @@ export default function Home() {
                                     {upcomingDailyTasks.map(task => {
                                         const status = getTaskStatus(task);
                                         return (
-                                            <Link to={`/task/${task.id}`} key={task.id} className="flex items-center justify-between card-button p-2">
-                                                <div>
-                                                    <p className="card-title">
-                                                        {task.title ?? 'Sans titre'}
-                                                    </p>
-                                                    <div className="card-subtitle">
+                                            <Link
+                                                to={`/task/${task.id}`}
+                                                key={task.id}
+                                                className="flex items-center justify-between card-button p-2 gap-3"
+                                            >
+                                                {/* Bloc texte avec largeur limitée */}
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="card-title truncate">{task.title ?? 'Sans titre'}</p>
+                                                    <div className="card-subtitle truncate">
                                                         {task.project_name ? `${task.project_name} • ` : ''}
                                                         {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Pas de date'}
                                                     </div>
                                                 </div>
-                                                <div className="flex items-center gap-3">
-                                                    <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                                                        status === 'Terminée' ? 'bg-green-100 text-green-700' :
-                                                            status === "Aujourd'hui" ? 'bg-blue-100 text-blue-700' :
-                                                                status === 'En retard' ? 'bg-red-100 text-red-700' :
-                                                                    'bg-yellow-100 text-yellow-700'
-                                                    }`}>
-                                                        {status}
+
+                                                {/* Statut */}
+                                                <div className="flex-shrink-0">
+                                                    <span
+                                                        className={`text-xs font-medium px-2 py-1 rounded-full ${
+                                                            status === 'Terminée'
+                                                                ? 'bg-green-100 text-green-700'
+                                                                : status === "Aujourd'hui"
+                                                                    ? 'bg-blue-100 text-blue-700'
+                                                                    : status === 'En retard'
+                                                                        ? 'bg-red-100 text-red-700'
+                                                                        : 'bg-yellow-100 text-yellow-700'
+                                                        }`}
+                                                    >
+                                                      {status}
                                                     </span>
                                                 </div>
                                             </Link>
