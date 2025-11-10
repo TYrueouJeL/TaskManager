@@ -138,7 +138,7 @@ export default function ProjectDetail() {
 
     return (
         <div className="project-detail">
-            <div className="">
+            <div>
                 <div className="project-detail__header">
                     <div>
                         <h1 className="project-detail__title">{project.title}</h1>
@@ -156,8 +156,8 @@ export default function ProjectDetail() {
                     </div>
                 </div>
 
-                <div className={"flex flex-col-2"}>
-                    <div>
+                <div className={"flex flex-col-2 gap-3"}>
+                    <div className={"min-w-1/4"}>
                         <div className="project-detail__card">
                             <div className="project-detail__description">
                                 {project.description ? <p>{project.description}</p> : <p className="text-sm text-gray-500">Aucune description</p>}
