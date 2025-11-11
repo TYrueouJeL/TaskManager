@@ -11,6 +11,7 @@ export interface Task {
     title: string;
     description: string;
     dueDate?: string | null;
+    start_date?: string | null;
     user_id: string;
     is_daily?: boolean | null;
     validationDate?: string | null;

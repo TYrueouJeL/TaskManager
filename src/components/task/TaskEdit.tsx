@@ -8,6 +8,7 @@ export default function TaskEdit({ task }: { task: any }) {
     const [title, setTitle] = useState(task.title || "");
     const [description, setDescription] = useState(task.description || "");
     const [dueDate, setDueDate] = useState(task.dueDate ? task.dueDate.split("T")[0] : null);
+    const [start_date, setStart_date] = useState(task.start_date ? task.start_date.split("T")[0] : null);
     const [projectId, setProjectId] = useState(task.project_id || task.projectId || "");
     const [projects, setProjects] = useState<Array<{ id: string; title: string }>>([]);
     const [mode, setMode] = useState<"daily" | "notDaily">(task.is_daily ? "daily" : "notDaily");
@@ -33,6 +34,7 @@ export default function TaskEdit({ task }: { task: any }) {
             title,
             description,
             dueDate,
+            start_date,
             is_daily: isDaily,
             project_id: projectId === "" ? null : projectId,
         };
@@ -130,6 +132,15 @@ export default function TaskEdit({ task }: { task: any }) {
                     )}
                     <span>Quotidienne</span>
                 </button>
+
+                {mode === "daily" ? (
+                    <div className={"form-group"}>
+                        <label htmlFor={"start_date"} className={"form-label"}>Date de début</label>
+                        <input type={"date"} id={"start_date"} name={"start_date"} className="form-input"
+                               value={start_date}
+                               onChange={(e) => setStart_date(e.target.value == "" ? null : e.target.value)} />
+                    </div>
+                ) : null}
 
                 <button type="submit" className="form-button">
                     Enregistrer les modifications

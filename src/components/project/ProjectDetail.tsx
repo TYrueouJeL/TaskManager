@@ -73,7 +73,9 @@ export default function ProjectDetail() {
                 const filteredDailyTasks: Task[] = res.data.filter((task: Task) => {
                     if (!task.is_daily) return false;
                     if (!task.dueDate) return true;
+                    if (!task.start_date) return false;
 
+                    if (new Date(task.start_date) > new Date()) return false;
                     const dueDate = new Date(task.dueDate);
                     return dueDate >= new Date();
                 });

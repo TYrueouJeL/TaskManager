@@ -32,12 +32,14 @@ export default function TaskCreateForm() {
         const title = formData.get("title") as string;
         const dueDateRaw = formData.get("dueDate") as string;
         const dueDate = dueDateRaw === "" ? null : dueDateRaw;
+        const start_dateRaw = formData.get("start_date") as string;
+        const start_date = start_dateRaw === "" ? null : start_dateRaw;
         const projectId = formData.get("projectId") as string;
         const is_daily = mode === "daily";
         const user_id = (await getActualUser()).id;
         const project_id = projectId === "" ? null : projectId;
 
-        const { data, error } = await createTask({ title, description, dueDate, is_daily, user_id, project_id });
+        const { data, error } = await createTask({ title, description, dueDate, start_date, is_daily, user_id, project_id });
         if (error) {
             console.error("Error creating task:", error);
             setLoading(false);
@@ -95,6 +97,13 @@ export default function TaskCreateForm() {
                 )}
                 <span>Quotidienne</span>
             </button>
+
+            {mode === "daily" ? (
+                <div className={"form-group"}>
+                    <label htmlFor={"start_date"} className={"form-label"}>Date de début</label>
+                    <input type={"date"} id={"start_date"} name={"start_date"} className="form-input" />
+                </div>
+            ) : null}
 
             <button type="submit" className="form-button" disabled={loading}>
                 {loading ? "Création…" : "Créer la tâche"}
