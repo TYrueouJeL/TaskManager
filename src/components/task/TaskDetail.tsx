@@ -1,106 +1,59 @@
-import { useEffect, useState } from 'react';
 import {Link, useNavigate, useParams} from "react-router";
-import {RiCheckLine, RiDeleteBinLine, RiEditLine, RiTimeLine} from 'react-icons/ri';
+import {RiEditLine, RiDeleteBinLine} from 'react-icons/ri';
 import {deleteTask, getTask, unvalidateTask, validateTask, getTaskDependencies} from "../../services/api.ts";
 import {FaCheck, FaX} from "react-icons/fa6";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import TaskList from "./TaskList.tsx";
 import TaskCard from "./TaskCard.tsx";
-
-function formatDate(iso?: string | null) {
-    if (!iso) return '-';
-    const d = new Date(iso);
-    if (Number.isNaN(d.getTime())) return '-';
-    return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-}
+import { useDataFetcher } from '../../hooks/useDataFetcher';
+import { formatDate, calculateTaskStatus } from '../../utils/dateUtils';
+import LoadingState from '../shared/LoadingState';
+import ErrorState from '../shared/ErrorState';
+import StatusIcon from '../shared/StatusIcon';
 
 export default function TaskDetail() {
     const { id } = useParams<{ id: string }>();
-
-    const [task, setTask] = useState(null);
-    const [taskDependencies, setTaskDependencies] = useState(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        let isMounted = true;
-
-        async function fetchData() {
-            try {
-                setLoading(true);
-                setError(null);
-
-                const { data: taskData, error: taskError } = await getTask(id!);
-                if (taskError) throw new Error("Erreur lors du chargement de la tâche.");
-                if (!isMounted) return;
-
-                setTask(taskData);
-
-                const { data: depsData, error: depsError } = await getTaskDependencies(taskData.id);
-                if (depsError) throw new Error("Erreur lors du chargement des dépendances.");
-
-                if (isMounted) {
-                    console.log(depsData);
-                    setTaskDependencies(depsData);
-                }
-            } catch (err: any) {
-                if (isMounted) setError(err.message);
-            } finally {
-                if (isMounted) setLoading(false);
-            }
-        }
-
-        fetchData();
-
-        return () => {
-            isMounted = false;
-        };
-    }, [id]);
+    const { data: task, loading, error, refetch } = useDataFetcher(
+        async () => {
+            const { data: taskData, error: taskError } = await getTask(id!);
+            if (taskError) throw taskError;
+            
+            const { data: depsData, error: depsError } = await getTaskDependencies(taskData.id);
+            if (depsError) throw depsError;
+            
+            return { data: { ...taskData, dependencies: depsData } };
+        },
+        [id]
+    );
 
     const handleValidate = async () => {
         if (!task) return;
-        setLoading(true);
-        const { data, error } = await validateTask(task.id);
-        if (error) {
-            setError('Erreur lors de la validation de la tâche.');
-        } else {
-            setTask(data);
-        }
-        navigate(0);
+        await validateTask(task.id);
+        refetch();
     }
 
     const handleUnValidate = async () => {
         if (!task) return;
-        setLoading(true);
-        const { data, error } = await unvalidateTask(task.id);
-        if (error) {
-            setError('Erreur lors de l\'annulation de la validation de la tâche.');
-        } else {
-            setTask(data);
-        }
-        navigate(0);
+        await unvalidateTask(task.id);
+        refetch();
     }
 
     const handleDelete = async () => {
-        if (!task) return;
-        setLoading(true);
-        const { data, error } = await deleteTask(task.id);
-        if (error) {
-            setError('Erreur lors de la suppression de la tâche.');
-        } else {
+        if (!task || !window.confirm('Supprimer cette tâche ?')) return;
+        const { error } = await deleteTask(task.id);
+        if (!error) {
             navigate('/task/list');
         }
-        setLoading(false);
     }
 
-    if (loading) return <div className="text-sm text-gray-500">Chargement…</div>;
-    if (error) return <div className="text-sm text-red-600">{error}</div>;
-    if (!task) return <div className="text-sm text-gray-500">Tâche introuvable.</div>;
+    if (loading) return <LoadingState />;
+    if (error) return <ErrorState message={error} />;
+    if (!task) return <LoadingState message="Tâche introuvable." />;
 
-    const validated = Boolean(task.validationDate);
-    const statusIcon = validated ? <RiCheckLine className="text-green-500" /> : <RiTimeLine className="text-yellow-500" />;
+    const status = calculateTaskStatus(task);
+    const dependencies = task.dependencies || [];
 
     return (
         <div className="max-w-3xl mx-auto p-6">
@@ -134,8 +87,8 @@ export default function TaskDetail() {
             <div className="card p-4 mb-4">
                 <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
-                        {statusIcon}
-                        <span className="text-sm text-gray-700">{validated ? 'Validée' : 'À faire'}</span>
+                        <StatusIcon status={status} />
+                        <span className="text-sm text-gray-700">{status.isDone ? 'Validée' : 'À faire'}</span>
                     </div>
                     <div className="text-sm text-gray-500">Échéance : {formatDate(task.dueDate)}</div>
                 </div>
@@ -146,17 +99,15 @@ export default function TaskDetail() {
                     </ReactMarkdown>
                 </div>
 
-                {taskDependencies && taskDependencies.length > 0 ? (
+                {dependencies.length > 0 ? (
                     <div className="mt-6">
-                        {/* Tâches prérequises */}
                         <h2 className="text-lg font-semibold mb-2">Tâches prérequises</h2>
-                        {taskDependencies
+                        {dependencies
                             .map((dep: any) => dep.predecessor_task)
                             .filter(Boolean)
                             .map((t: any) => (
                                 <TaskCard key={t.id} task={t} />
                             ))}
-
                     </div>
                 ) : (
                     <p className="text-sm text-gray-500 mt-4">Aucune dépendance.</p>

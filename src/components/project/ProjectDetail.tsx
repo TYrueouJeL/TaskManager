@@ -1,139 +1,73 @@
-import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router';
-import {RiCheckLine, RiTimeLine, RiEditLine, RiDeleteBinLine} from 'react-icons/ri';
+import { Link, useParams } from 'react-router';
+import {RiEditLine, RiDeleteBinLine} from 'react-icons/ri';
 import '../../style/ProjectDetail.css';
-import type { Project, Task } from '../../db';
+import type { Task } from '../../db';
 import {
     getProject,
     getTasksByProject,
     deleteProject,
     deleteTask,
 } from '../../services/api';
-import {FaEye} from "react-icons/fa";
-
-function formatDate(iso?: string | null) {
-    if (!iso) return '-';
-    const d = new Date(iso);
-    if (Number.isNaN(d.getTime())) return '-';
-    return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-}
+import { useDataFetcher } from '../../hooks/useDataFetcher';
+import { useDeleteConfirmation } from '../../hooks/useDeleteConfirmation';
+import { formatDate, getTomorrow } from '../../utils/dateUtils';
+import LoadingState from '../shared/LoadingState';
+import ErrorState from '../shared/ErrorState';
+import TaskListItem from '../task/TaskListItem';
 
 export default function ProjectDetail() {
     const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
 
-    const [project, setProject] = useState<Project | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-    const [deleting, setDeleting] = useState<boolean>(false);
+    const { data: project, loading, error } = useDataFetcher(
+        () => getProject(id!),
+        [id]
+    );
 
-    const [tasks, setTasks] = useState<Task[]>([]);
-    const [dailyTasks, setDailyTasks] = useState<Task[]>([]);
-    const [tasksLoading, setTasksLoading] = useState<boolean>(false);
-    const [tasksError, setTasksError] = useState<string | null>(null);
+    const { 
+        data: allTasks, 
+        loading: tasksLoading, 
+        error: tasksError,
+        refetch: refetchTasks
+    } = useDataFetcher(
+        () => getTasksByProject(id!),
+        [id]
+    );
 
-    useEffect(() => {
-        let mounted = true;
-        async function load() {
-            if (!id) return;
-            setLoading(true);
-            setError(null);
-            try {
-                const res = await getProject(id);
-                if (!mounted) return;
-                if (res.error) throw res.error;
-                setProject(res.data ?? null);
-            } catch (err: unknown) {
-                const msg = err instanceof Error ? err.message : String(err ?? 'Erreur inconnue');
-                setError(msg);
-            } finally {
-                if (mounted) setLoading(false);
-            }
-        }
-        load();
-        return () => { mounted = false; };
-    }, [id]);
+    const { handleDelete: handleProjectDelete, deleting } = useDeleteConfirmation({
+        onDelete: deleteProject,
+        redirectPath: '/project/list',
+        confirmMessage: 'Supprimer ce projet ? Cette action est irréversible.'
+    });
 
-    useEffect(() => {
-        let mounted = true;
-        if (!id) {
-            setTasks([]);
-            return;
-        }
-        async function load() {
-            setTasksLoading(true);
-            setTasksError(null);
-            try {
-                const res = await getTasksByProject(id);
-                if (!mounted) return;
-                if (res.error) throw res.error;
-                const filteredTasks: Task[] = res.data.filter(
-                    (task: Task) => task.is_daily === false
-                );
-                const filteredDailyTasks: Task[] = res.data.filter((task: Task) => {
-                    if (!task.is_daily) return false;
-                    if (!task.dueDate) return true;
-                    if (!task.start_date) return false;
+    const { handleDelete: handleTaskDelete } = useDeleteConfirmation({
+        onDelete: deleteTask,
+        onSuccess: refetchTasks,
+        confirmMessage: 'Supprimer cette tâche ?'
+    });
 
-                    if (new Date(task.start_date) > new Date()) return false;
-                    const dueDate = new Date(task.dueDate);
-                    return dueDate >= new Date();
-                });
-                setTasks(filteredTasks ?? []);
-                setDailyTasks(filteredDailyTasks ?? []);
-            } catch (err: unknown) {
-                const msg = err instanceof Error ? err.message : String(err ?? 'Erreur inconnue');
-                setTasksError(msg);
-            } finally {
-                if (mounted) setTasksLoading(false);
-            }
-        }
-        load();
-        return () => { mounted = false; };
-    }, [id]);
+    if (loading) return <LoadingState className="project-detail project-detail__container text-sm text-gray-500" />;
+    if (error) return <ErrorState message={error} className="project-detail project-detail__container text-sm text-red-600" />;
+    if (!project) return <LoadingState message="Projet introuvable." className="project-detail project-detail__container text-sm text-gray-500" />;
 
-    async function handleDelete() {
-        if (!project || !id) return;
-        if (!window.confirm('Supprimer ce projet ? Cette action est irréversible.')) return;
-        setDeleting(true);
-        try {
-            const res = await deleteProject(id);
-            if (res.error) throw res.error;
-            navigate('/project/list');
-        } catch (err: unknown) {
-            const msg = err instanceof Error ? err.message : String(err ?? 'Erreur lors de la suppression');
-            setError(msg);
-        } finally {
-            setDeleting(false);
-        }
-    }
+    const tasks = (allTasks || []).filter((task: Task) => task.is_daily === false);
+    const dailyTasks = (allTasks || []).filter((task: Task) => {
+        if (!task.is_daily) return false;
+        if (!task.dueDate) return true;
+        if (!task.start_date) return false;
+        
+        if (new Date(task.start_date) > new Date()) return false;
+        const dueDate = new Date(task.dueDate);
+        return dueDate >= new Date();
+    });
 
-    async function handleDeleteTask(taskId: string) {
-        if (!window.confirm('Supprimer cette tâche ?')) return;
-        try {
-            const res = await deleteTask(taskId);
-            if (res.error) throw res.error;
-            setTasks(prev => prev.filter(t => t.id !== taskId));
-        } catch (err: unknown) {
-            const msg = err instanceof Error ? err.message : String(err ?? 'Erreur lors de la suppression');
-            setTasksError(msg);
-        }
-    }
-
-    if (loading) return <div className="project-detail project-detail__container text-sm text-gray-500">Chargement…</div>;
-    if (error) return <div className="project-detail project-detail__container text-sm text-red-600">{error}</div>;
-    if (!project) return <div className="project-detail project-detail__container text-sm text-gray-500">Projet introuvable.</div>;
-
-    const now = new Date();
-    const tommorow = new Date(now);
-    tommorow.setDate(tommorow.getDate() + 1);
+    const tomorrow = getTomorrow();
     const totalTasks = tasks.length;
     const completedTasks = tasks.filter(t => Boolean(t.validationDate)).length;
     const pendingTasks = tasks.filter(t => !t.validationDate).length;
     const overdueTasks = tasks.filter(t => {
         if (t.dueDate && !t.validationDate) {
             const d = new Date(t.dueDate);
-            return !Number.isNaN(d.getTime()) && d < tommorow;
+            return !Number.isNaN(d.getTime()) && d < tomorrow;
         }
         return false;
     }).length;
@@ -152,7 +86,7 @@ export default function ProjectDetail() {
                         <Link to={`/project/edit/${project.id}`} className="project-detail__link" title="Éditer">
                             <RiEditLine />
                         </Link>
-                        <button onClick={handleDelete} disabled={deleting} className="project-detail__link" title="Supprimer">
+                        <button onClick={() => handleProjectDelete(id!)} disabled={deleting} className="project-detail__link" title="Supprimer">
                             <RiDeleteBinLine className="text-red-500 cursor-pointer" />
                         </button>
                     </div>
@@ -190,130 +124,36 @@ export default function ProjectDetail() {
                         <div className="project-detail__tasks h-min">
                             <h2 className="text-lg font-medium mb-3">Tâches</h2>
 
-                            {tasksLoading && <div className="text-sm text-gray-500">Chargement des tâches…</div>}
-                            {tasksError && <div className="text-sm text-red-600">{tasksError}</div>}
-                            {!tasksLoading && tasks.length === 0 && <div className="text-sm text-gray-500">Aucune tâche pour ce projet.</div>}
+                            {tasksLoading && <LoadingState message="Chargement des tâches…" />}
+                            {tasksError && <ErrorState message={tasksError} />}
+                            {!tasksLoading && tasks.length === 0 && <LoadingState message="Aucune tâche pour ce projet." />}
 
                             <ul className="project-detail__task-list">
-                                {tasks.map(task => {
-                                    const done = Boolean(task.validationDate);
-                                    const today = !done && task.dueDate && (() => {
-                                        const d = new Date(task.dueDate!);
-                                        return !Number.isNaN(d.getTime()) && d >= now && d < tommorow;
-                                    })
-                                    const overdue = !done && task.dueDate && (() => {
-                                        const d = new Date(task.dueDate!);
-                                        return !Number.isNaN(d.getTime()) && d < tommorow;
-                                    })();
-
-                                    const itemClass = [
-                                        'project-detail__task-item',
-                                        done ? 'project-detail__task-done' : '',
-                                        today ? 'project-detail__task-today' : '',
-                                        overdue ? 'project-detail__task-overdue' : ''
-                                    ].join(' ').trim();
-
-                                    return (
-                                        <li key={task.id} className={itemClass} tabIndex={0}>
-                                            <div className="project-detail__task-info flex items-center gap-2">
-                                                {/* Icône selon l'état */}
-                                                {done ? (
-                                                    <RiCheckLine className="project-detail__icon--done flex-shrink-0" />
-                                                ) : today ? (
-                                                    <RiTimeLine className="project-detail__icon--info flex-shrink-0" />
-                                                ) : (
-                                                    <RiTimeLine className="project-detail__icon--pending flex-shrink-0" />
-                                                )}
-
-                                                {/* Texte avec truncate */}
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="project-detail__task-title">{task.title}</div>
-                                                    <div className="project-detail__task-due text-sm text-gray-500">
-                                                        Échéance : {formatDate(task.dueDate)}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* Actions */}
-                                            <div className="flex items-center gap-2 mt-2 lg:mt-0">
-                                                <Link to={`/task/edit/${task.id}`} className="project-detail__link" title="Éditer">
-                                                    <RiEditLine />
-                                                </Link>
-                                                <button onClick={() => handleDeleteTask(task.id)} title="Supprimer">
-                                                    <RiDeleteBinLine className="text-red-500 cursor-pointer" />
-                                                </button>
-                                                <Link to={`/task/${task.id}`} title="Détail">
-                                                    <FaEye className="text-blue-500 cursor-pointer" />
-                                                </Link>
-                                            </div>
-                                        </li>
-                                    );
-                                })}
+                                {tasks.map(task => (
+                                    <TaskListItem 
+                                        key={task.id} 
+                                        task={task} 
+                                        onDelete={handleTaskDelete}
+                                    />
+                                ))}
                             </ul>
                         </div>
 
                         <div className="project-detail__tasks h-min">
                             <h2 className="text-lg font-medium mb-3">Tâches quotidiennes</h2>
 
-                            {tasksLoading && <div className="text-sm text-gray-500">Chargement des tâches…</div>}
-                            {tasksError && <div className="text-sm text-red-600">{tasksError}</div>}
-                            {!tasksLoading && dailyTasks.length === 0 && <div className="text-sm text-gray-500">Aucune tâche quotidienne pour ce projet.</div>}
+                            {tasksLoading && <LoadingState message="Chargement des tâches…" />}
+                            {tasksError && <ErrorState message={tasksError} />}
+                            {!tasksLoading && dailyTasks.length === 0 && <LoadingState message="Aucune tâche quotidienne pour ce projet." />}
 
                             <ul className="project-detail__task-list">
-                                {dailyTasks.map(task => {
-                                    const done = Boolean(task.validationDate);
-                                    const today = !done && task.dueDate && (() => {
-                                        const d = new Date(task.dueDate!);
-                                        return !Number.isNaN(d.getTime()) && d >= now && d < tommorow;
-                                    })
-                                    const overdue = !done && task.dueDate && (() => {
-                                        const d = new Date(task.dueDate!);
-                                        return !Number.isNaN(d.getTime()) && d < tommorow;
-                                    })();
-
-                                    const itemClass = [
-                                        'project-detail__task-item',
-                                        done ? 'project-detail__task-done' : '',
-                                        today ? 'project-detail__task-today' : '',
-                                        overdue ? 'project-detail__task-overdue' : ''
-                                    ].join(' ').trim();
-
-                                    return (
-                                        <li key={task.id} className={itemClass} tabIndex={0}>
-                                            <div className="project-detail__task-info flex items-center gap-2">
-                                                {/* Icône selon l'état */}
-                                                {done ? (
-                                                    <RiCheckLine className="project-detail__icon--done flex-shrink-0" />
-                                                ) : today ? (
-                                                    <RiTimeLine className="project-detail__icon--info flex-shrink-0" />
-                                                ) : (
-                                                    <RiTimeLine className="project-detail__icon--pending flex-shrink-0" />
-                                                )}
-
-                                                {/* Texte avec truncate */}
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="project-detail__task-title">{task.title}</div>
-                                                    <div className="project-detail__task-due text-sm text-gray-500">
-                                                        Échéance : {formatDate(task.dueDate)}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* Actions */}
-                                            <div className="flex items-center gap-2 mt-2 lg:mt-0">
-                                                <Link to={`/task/edit/${task.id}`} className="project-detail__link" title="Éditer">
-                                                    <RiEditLine />
-                                                </Link>
-                                                <button onClick={() => handleDeleteTask(task.id)} title="Supprimer">
-                                                    <RiDeleteBinLine className="text-red-500 cursor-pointer" />
-                                                </button>
-                                                <Link to={`/task/${task.id}`} title="Détail">
-                                                    <FaEye className="text-blue-500 cursor-pointer" />
-                                                </Link>
-                                            </div>
-                                        </li>
-                                    );
-                                })}
+                                {dailyTasks.map(task => (
+                                    <TaskListItem 
+                                        key={task.id} 
+                                        task={task} 
+                                        onDelete={handleTaskDelete}
+                                    />
+                                ))}
                             </ul>
                         </div>
                     </div>
