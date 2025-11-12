@@ -26,3 +26,11 @@ export interface User {
     username?: string | null;
     created_at?: string | null;
 }
+
+export interface TaskDependencies {
+    id: string;
+    predecessor_task_id: string;
+    successor_task_id: string;
+    predecessor_task: Task;
+    successor_task: Task;
+}

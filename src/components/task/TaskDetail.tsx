@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import {Link, useNavigate, useParams} from "react-router";
 import {RiCheckLine, RiDeleteBinLine, RiEditLine, RiTimeLine} from 'react-icons/ri';
-import {deleteTask, getTask, unvalidateTask, validateTask} from "../../services/api.ts";
+import {deleteTask, getTask, unvalidateTask, validateTask, getTaskDependencies} from "../../services/api.ts";
 import {FaCheck, FaX} from "react-icons/fa6";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import TaskList from "./TaskList.tsx";
+import TaskCard from "./TaskCard.tsx";
 
 function formatDate(iso?: string | null) {
     if (!iso) return '-';
@@ -17,24 +19,44 @@ export default function TaskDetail() {
     const { id } = useParams<{ id: string }>();
 
     const [task, setTask] = useState(null);
+    const [taskDependencies, setTaskDependencies] = useState(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        async function fetchData() {
-            setLoading(true);
-            const { data: taskData, error: taskError } = await getTask(id!);
-            if (taskError) {
-                setError('Erreur lors du chargement de la tâche.');
-                setLoading(false);
-                return;
-            }
-            setTask(taskData);
+        let isMounted = true;
 
-            setLoading(false);
+        async function fetchData() {
+            try {
+                setLoading(true);
+                setError(null);
+
+                const { data: taskData, error: taskError } = await getTask(id!);
+                if (taskError) throw new Error("Erreur lors du chargement de la tâche.");
+                if (!isMounted) return;
+
+                setTask(taskData);
+
+                const { data: depsData, error: depsError } = await getTaskDependencies(taskData.id);
+                if (depsError) throw new Error("Erreur lors du chargement des dépendances.");
+
+                if (isMounted) {
+                    console.log(depsData);
+                    setTaskDependencies(depsData);
+                }
+            } catch (err: any) {
+                if (isMounted) setError(err.message);
+            } finally {
+                if (isMounted) setLoading(false);
+            }
         }
+
         fetchData();
+
+        return () => {
+            isMounted = false;
+        };
     }, [id]);
 
     const handleValidate = async () => {
@@ -123,6 +145,23 @@ export default function TaskDetail() {
                         {task.description || "*Aucune description*"}
                     </ReactMarkdown>
                 </div>
+
+                {taskDependencies && taskDependencies.length > 0 ? (
+                    <div className="mt-6">
+                        {/* Tâches prérequises */}
+                        <h2 className="text-lg font-semibold mb-2">Tâches prérequises</h2>
+                        {taskDependencies
+                            .map((dep: any) => dep.predecessor_task)
+                            .filter(Boolean)
+                            .map((t: any) => (
+                                <TaskCard key={t.id} task={t} />
+                            ))}
+
+                    </div>
+                ) : (
+                    <p className="text-sm text-gray-500 mt-4">Aucune dépendance.</p>
+                )}
+
             </div>
         </div>
     );

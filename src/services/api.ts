@@ -1,5 +1,5 @@
 import { supabase } from '../supabase/supabaseClient';
-import type {Project, Task, User} from "../db.ts";
+import type {Project, Task, User, TaskDependencies} from "../db.ts";
 
 export async function getProjects(): Promise<{ data?: Project[]; error?: any }> {
     return supabase.from<Project>('project').select('*');
@@ -69,3 +69,18 @@ export async function getActualUser() {
 export async function getUser(id: string) {
     return supabase.from<User>('user').select('*').eq('id', id).single();
 }
+
+export async function getTaskDependencies(id: string) {
+    const { data, error } = await supabase
+        .from('task_dependencies')
+        .select(`
+      id,
+      predecessor_task_id,
+      successor_task_id,
+      predecessor_task:predecessor_task_id (*)
+    `)
+        .eq('successor_task_id', id);
+
+    return { data, error };
+}
+
