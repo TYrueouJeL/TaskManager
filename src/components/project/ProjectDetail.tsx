@@ -118,6 +118,13 @@ export default function ProjectDetail() {
                                 <div className="value" style={{ color: 'var(--accent-danger)' }}>{overdueTasks}</div>
                             </div>
                         </div>
+
+                        <Link
+                            to="/task/create"
+                            className="create-button"
+                        >
+                            Nouvelle tâche
+                        </Link>
                     </div>
 
                     <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-4">
