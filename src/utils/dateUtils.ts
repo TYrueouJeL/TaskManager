@@ -32,10 +32,9 @@ export function calculateTaskStatus(
     
     const due = new Date(task.dueDate);
     const now = new Date();
-    const tomorrow = getTomorrow();
     
     const isToday = !isDone && due.toDateString() === now.toDateString();
-    const isOverdue = !isDone && due < tomorrow;
+    const isOverdue = !isDone && due < now;
     
     return { isDone, isToday, isOverdue };
 }
