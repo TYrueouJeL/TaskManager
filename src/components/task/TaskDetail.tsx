@@ -1,5 +1,5 @@
 import {Link, useNavigate, useParams} from "react-router";
-import {RiEditLine, RiDeleteBinLine} from 'react-icons/ri';
+import {RiEditLine, RiDeleteBinLine, RiFolderOpenLine} from 'react-icons/ri';
 import {deleteTask, getTask, unvalidateTask, validateTask, getTaskDependencies} from "../../services/api.ts";
 import {FaCheck, FaX} from "react-icons/fa6";
 import ReactMarkdown from "react-markdown";
@@ -10,6 +10,7 @@ import { formatDate, calculateTaskStatus } from '../../utils/dateUtils';
 import LoadingState from '../shared/LoadingState';
 import ErrorState from '../shared/ErrorState';
 import StatusIcon from '../shared/StatusIcon';
+import ProjectCard from "../project/ProjectCard.tsx";
 
 export default function TaskDetail() {
     const { id } = useParams<{ id: string }>();
@@ -64,6 +65,12 @@ export default function TaskDetail() {
                 </div>
 
                 <div className={"flex items-center justify-center gap-2"}>
+                    {task.project_id ?
+                        <Link to={`/project/${task.project_id}`}>
+                            <RiFolderOpenLine className={"text-blue-500 cursor-pointer"}/>
+                        </Link> : null
+                    }
+
                     <Link to={`/task/edit/${task.id}`} title="Éditer">
                         <RiEditLine />
                     </Link>
