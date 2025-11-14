@@ -8,7 +8,6 @@
 @import "./style/Disconnected.css";
 @import "./style/NotFound.css";
 
-@custom-variant dark (&:is(.dark *));
 @plugin "@tailwindcss/typography";
 
 @plugin "tailwindcss-animate";
