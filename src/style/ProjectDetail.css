@@ -17,19 +17,6 @@
     color: var(--text);
 }
 
-/* Dark mode overrides (supporte .dark sur un parent ou data-theme="dark") */
-.dark .project-detail,
-[data-theme="dark"] .project-detail {
-    --text: #e6eef8; /* light text */
-    --muted: #9aa6bf;
-    --card-bg: #0f1724; /* card dark */
-    --card-border: rgba(255,255,255,0.04);
-    --accent-success: #34d399;
-    --accent-warn: #f59e0b;
-    --accent-danger: #f87171;
-    --shadow: 0 1px 2px rgba(2,6,23,0.6);
-}
-
 /* Layout */
 .project-detail__container {
     max-width: 48rem; /* ~3xl */
@@ -80,10 +67,6 @@
 }
 .project-detail__btn:hover {
     background-color: rgba(0,0,0,0.03);
-}
-.dark .project-detail__btn:hover,
-[data-theme="dark"] .project-detail__btn:hover {
-    background-color: rgba(255,255,255,0.02);
 }
 .project-detail__btn--danger {
     color: var(--accent-danger);
@@ -177,10 +160,6 @@
 }
 .project-detail__task-item:hover {
     background-color: rgba(0,0,0,0.02);
-}
-.dark .project-detail__task-item:hover,
-[data-theme="dark"] .project-detail__task-item:hover {
-    background-color: rgba(255,255,255,0.02);
 }
 
 /* Task info */

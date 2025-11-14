@@ -2,10 +2,6 @@
     @apply bg-white p-6 rounded-lg shadow-md;
 }
 
-html.dark .task-edit-form {
-    @apply bg-slate-800;
-}
-
 .form-group {
     @apply mb-4;
 }
@@ -14,66 +10,33 @@ html.dark .task-edit-form {
     @apply bg-blue-400 text-white py-2 px-4 rounded hover:bg-blue-500;
 }
 
-html.dark .form-submit {
-    @apply bg-purple-700 py-2 px-4 rounded hover:bg-purple-800;
-}
-
 .form-text {
     @apply text-gray-700 mb-2
-}
-
-html.dark .form-text {
-    @apply text-gray-300;
 }
 
 .form-label {
     @apply block text-gray-700 mb-2;
 }
 
-html.dark .form-label {
-    @apply text-gray-300;
-}
-
 .form-input {
     @apply border border-gray-300 p-2 rounded;
-}
-
-html.dark .form-input {
-    @apply bg-slate-700 border-slate-600 text-white;
 }
 
 .form-textarea {
     @apply border border-gray-300 p-2 rounded h-32;
 }
 
-html.dark .form-textarea {
-    @apply bg-slate-700 border-slate-600 text-white;
-}
-
 .form-select {
     @apply border border-gray-300 p-2 rounded;
-}
-
-html.dark .form-select {
-    @apply bg-slate-700 border-slate-600 text-white;
 }
 
 .md-editor {
     @apply border border-gray-300 rounded;
 }
 
-html.dark .md-editor {
-    @apply border-slate-600 bg-slate-700 text-white;
-}
-
 .login-form {
     @apply flex flex-col gap-3 w-full max-w-sm p-6 bg-white rounded-xl shadow-md border border-gray-200
 }
-
-html.dark .login-form {
-    @apply bg-slate-800 border-slate-600 text-white;
-}
-
 .login-form-title {
     @apply text-xl font-semibold text-center mb-2
 }
@@ -82,16 +45,8 @@ html.dark .login-form {
     @apply px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400
 }
 
-html.dark .login-form-input {
-    @apply border-slate-600 text-white;
-}
-
 .login-form-submit {
     @apply mt-2 px-4 py-2 rounded-lg bg-green-500 text-white font-medium hover:bg-green-600 disabled:opacity-50 transition
-}
-
-html.dark .login-form-submit {
-    @apply bg-indigo-600 hover:bg-indigo-700
 }
 
 .login-form-text {
@@ -102,46 +57,22 @@ html.dark .login-form-submit {
     @apply text-green-500 hover:underline
 }
 
-html.dark .login-form-link {
-    @apply text-indigo-600
-}
-
 .button-is-daily {
     @apply flex items-center gap-2 px-4 py-2 rounded border transition-all duration-200 font-medium border-green-600 bg-green-50 text-green-700 shadow-sm hover:bg-green-100
-}
-
-html.dark .button-is-daily {
-    @apply border-purple-600 bg-slate-700 text-purple-300 hover:bg-slate-600
 }
 
 .button-is-not-daily {
     @apply flex items-center gap-2 px-4 py-2 rounded border transition-all duration-200 font-medium border-gray-300 bg-white hover:bg-gray-50 text-green-700
 }
 
-html.dark .button-is-not-daily{
-    @apply text-purple-300 bg-slate-700 border-slate-600 hover:bg-slate-800;
-}
-
 .button-is-daily-icon {
     @apply w-5 h-5 text-green-600
-}
-
-html.dark .button-is-daily-icon {
-    @apply text-purple-300
 }
 
 .button-is-not-daily-icon {
     @apply w-5 h-5 text-green-600
 }
 
-html.dark .button-is-not-daily-icon {
-    @apply text-purple-300
-}
-
 .form-button {
     @apply rounded border gap-2 px-4 py-2 hover:bg-green-50 text-green-700 transition mt-4
-}
-
-html.dark .form-button {
-    @apply bg-slate-700 hover:bg-slate-800 text-purple-400
 }

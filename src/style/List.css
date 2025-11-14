@@ -6,14 +6,6 @@
     @apply bg-gray-100;
 }
 
-html.dark .list-button {
-    @apply border-gray-700 text-gray-400;
-}
-
-html.dark .list-button:hover {
-    @apply bg-slate-800;
-}
-
 .create-button {
     @apply flex items-center gap-2 p-2 text-blue-500 border border-blue-200 rounded-lg;
 }
@@ -22,58 +14,26 @@ html.dark .list-button:hover {
     @apply bg-blue-50;
 }
 
-html.dark .create-button {
-    @apply border-blue-700 text-blue-400;
-}
-
-html.dark .create-button:hover {
-    @apply bg-slate-800;
-}
-
 .filter {
     @apply bg-white border border-gray-200 shadow-md rounded-xl px-6 py-4 w-[95%] sm:w-auto
-}
-
-html.dark .filter {
-    @apply bg-slate-800 border-slate-600;
 }
 
 .filter h3 {
     @apply text-lg font-semibold text-gray-700 mb-3 text-center sm:text-left
 }
 
-html.dark .filter h3 {
-    @apply text-white
-}
-
 .filter label {
     @apply flex items-center gap-2  text-sm text-gray-700
-}
-
-html.dark .filter label {
-    @apply text-white
 }
 
 .filter div div {
     @apply bg-gray-50 px-3 py-2 rounded-md border hover:bg-gray-100 transition
 }
 
-html.dark .filter div div {
-    @apply text-white bg-slate-800 hover:bg-slate-700 border-slate-600
-}
-
 .filter-input {
     @apply border border-gray-300 rounded-md px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none
 }
 
-html.dark .filter-input {
-    @apply border-slate-600 bg-slate-800;
-}
-
 .filter-input::placeholder {
     @apply text-gray-700 opacity-75 hover:opacity-100
-}
-
-html.dark .filter-input::placeholder {
-    @apply text-white
 }

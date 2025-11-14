@@ -2,78 +2,38 @@
     @apply flex items-center gap-4 p-4 rounded-lg border hover:shadow-md transition-shadow bg-white
 }
 
-html.dark .card-article {
-    @apply bg-gray-800;
-}
-
 .project-card-article {
     @apply flex flex-col gap-4 p-4 rounded-lg border hover:shadow-md transition-shadow bg-white
-}
-
-html.dark .project-card-article {
-    @apply bg-gray-800;
 }
 
 .card-title {
     @apply text-sm md:text-base font-medium text-gray-800 truncate
 }
 
-html.dark .card-title {
-    @apply text-gray-200;
-}
-
 .card-subtitle {
     @apply text-xs text-gray-500 mt-1
-}
-
-html.dark .card-subtitle {
-    @apply text-gray-400;
 }
 
 .card-description {
     @apply text-sm text-gray-600 mt-2
 }
 
-html.dark .card-description {
-    @apply text-gray-300;
-}
-
 .card-progress {
     @apply w-full bg-gray-200 rounded-full h-3 overflow-hidden;
-}
-
-html.dark .card-progress {
-    @apply bg-gray-700;
 }
 
 .card-progress div {
     @apply h-full bg-gradient-to-r from-green-400 to-blue-500 transition-all duration-300;
 }
 
-html.dark .card-progress div {
-    @apply from-blue-500 to-purple-600;
-}
-
 .card-progress-footer {
     @apply mt-2 text-xs text-gray-500 flex justify-between;
-}
-
-html.dark .card-progress-footer {
-    @apply text-gray-400;
 }
 
 .card-status-icon {
     @apply inline-flex items-center justify-center w-9 h-9 rounded-full bg-gray-50
 }
 
-html.dark .card-status-icon {
-    @apply bg-gray-700;
-}
-
 .card-icon {
     @apply px-3 py-1 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 text-xs font-medium
-}
-
-html.dark .card-icon {
-    @apply bg-gradient-to-r from-blue-900 to-blue-800 text-blue-200;
 }

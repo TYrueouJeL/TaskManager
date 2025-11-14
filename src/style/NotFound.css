@@ -1,55 +1,26 @@
 .not-found {
     @apply min-h-screen flex flex-col items-center justify-center bg-gray-100  transition-colors duration-300 p-6
 }
-
-html.dark .not-found {
-    @apply bg-gray-900
-}
-
 .not-found-error {
     @apply text-6xl text-red-500
-}
-
-html.dark .not-found-error {
-    @apply text-red-400
 }
 
 .not-found-error-text {
     @apply text-4xl font-extrabold text-gray-800
 }
 
-html.dark .not-found-error-text {
-    @apply text-gray-100
-}
-
 .not-found-card {
     @apply max-w-md w-full text-center p-8 bg-white shadow-lg rounded-2xl
-}
-
-html.dark .not-found-card {
-    @apply bg-gray-800
 }
 
 .not-found-text {
     @apply text-lg font-semibold text-gray-700
 }
 
-html.dark .not-found-text {
-    @apply text-gray-200
-}
-
 .not-found-subtext {
     @apply text-gray-500 text-sm
 }
 
-html.dark .not-found-subtext {
-    @apply text-gray-400
-}
-
 .not-found-button {
     @apply flex items-center p-2 gap-2 border border-black rounded-lg
-}
-
-html.dark .not-found-button {
-    @apply border-slate-400 text-slate-400
 }

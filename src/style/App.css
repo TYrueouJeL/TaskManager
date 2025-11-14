@@ -30,34 +30,10 @@
     @apply text-white hover:text-green-300 px-2;
 }
 
-html.dark .header-button {
-    @apply text-white hover:text-blue-500;
-}
-
-html.dark .navigation-button {
-    @apply border-slate-700;
-}
-
-html.dark .navigation-button:hover {
-    @apply bg-slate-700;
-}
-
-html.dark .title {
-    @apply text-gray-200;
-}
-
 .header {
     @apply bg-gradient-to-r from-green-400 to-blue-500 text-white p-4 mb-4;
 }
 
-html.dark .header {
-    @apply bg-gradient-to-r from-blue-900 to-purple-900 text-gray-200;
-}
-
 .card-button {
     @apply border border-gray-300 rounded-lg shadow-md;
-}
-
-html.dark .card-button {
-    @apply border-gray-500
 }
