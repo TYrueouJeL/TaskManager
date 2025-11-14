@@ -2,7 +2,6 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "./supabase/supabaseClient.ts";
 import type { User } from "@supabase/supabase-js";
-import ThemeToggle from "./components/ThemeToggle.tsx";
 import { Menu, X } from "lucide-react";
 
 function App() {
@@ -56,7 +55,6 @@ function App() {
                                 <li><Link to="/login" className="header-button">Se connecter</Link></li>
                             )}
                         </ul>
-                        <ThemeToggle />
                     </nav>
 
                     {/* Mobile Menu Toggle */}
@@ -121,9 +119,6 @@ function App() {
                                     </Link>
                                 </li>
                             )}
-                            <div className="mt-2">
-                                <ThemeToggle />
-                            </div>
                         </ul>
                     </nav>
                 )}
