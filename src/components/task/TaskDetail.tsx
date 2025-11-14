@@ -1,16 +1,15 @@
 import {Link, useNavigate, useParams} from "react-router";
 import {RiEditLine, RiDeleteBinLine, RiFolderOpenLine} from 'react-icons/ri';
-import {deleteTask, getTask, unvalidateTask, validateTask, getTaskDependencies} from "../../services/api.ts";
+import {deleteTask, getTask, unvalidateTask, validateTask, getTaskDependencies} from "@/services/api.ts";
 import {FaCheck, FaX} from "react-icons/fa6";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import TaskCard from "./TaskCard.tsx";
-import { useDataFetcher } from '../../hooks/useDataFetcher';
-import { formatDate, calculateTaskStatus } from '../../utils/dateUtils';
+import { useDataFetcher } from '@/hooks/useDataFetcher.ts';
+import { formatDate, calculateTaskStatus } from '@/utils/dateUtils.ts';
 import LoadingState from '../shared/LoadingState';
 import ErrorState from '../shared/ErrorState';
 import StatusIcon from '../shared/StatusIcon';
-import ProjectCard from "../project/ProjectCard.tsx";
 
 export default function TaskDetail() {
     const { id } = useParams<{ id: string }>();
@@ -113,7 +112,9 @@ export default function TaskDetail() {
                             .map((dep: any) => dep.predecessor_task)
                             .filter(Boolean)
                             .map((t: any) => (
-                                <TaskCard key={t.id} task={t} />
+                                <div className={"mt-4"}>
+                                    <TaskCard key={t.id} task={t} />
+                                </div>
                             ))}
                     </div>
                 ) : (

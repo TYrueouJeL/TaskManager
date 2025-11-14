@@ -9,14 +9,6 @@ export async function getProject(id: string) {
     return supabase.from<Project>('project').select('*').eq('id', id).single();
 }
 
-export async function getProjectByTask(taskId: string) {
-    return supabase
-        .from<Project>('project')
-        .select('*, task!inner(id)')
-        .eq('task.id', taskId)
-        .single();
-}
-
 export async function createProject(payload: Partial<Project>) {
     return supabase.from<Project>('project').insert(payload).single();
 }
@@ -41,8 +33,14 @@ export async function getTask(id: string) {
     return supabase.from<Task>('task').select('*').eq('id', id).single();
 }
 
-export async function createTask(payload: Partial<Task>) {
-    return supabase.from<Task>('task').insert(payload).single();
+export async function createTask(task: any) {
+    const { data, error } = await supabase
+        .from('task')
+        .insert(task)
+        .select()
+        .single();
+
+    return { data, error };
 }
 
 export async function updateTask(id: string, payload: Partial<Task>) {
@@ -84,3 +82,13 @@ export async function getTaskDependencies(id: string) {
     return { data, error };
 }
 
+export async function addTaskDependency(predecessorTaskId: string, successorTaskId: string) {
+    return supabase.from<TaskDependencies>('task_dependencies').insert({
+        predecessor_task_id: predecessorTaskId,
+        successor_task_id: successorTaskId
+    }).single();
+}
+
+export async function removeTaskDependency(id: string) {
+    return supabase.from<TaskDependencies>('task_dependencies').delete().eq('id', id).single();
+}
