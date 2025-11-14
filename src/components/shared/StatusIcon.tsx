@@ -12,13 +12,13 @@ export default function StatusIcon({ status, size = 'md' }: StatusIconProps) {
     if (status.isDone) {
         return <RiCheckLine className={`text-green-500 ${sizeClass}`} />;
     }
+
+    if (status.isToday) {
+        return <RiTimeLine className={`text-blue-500 ${sizeClass}`} />;
+    }
     
     if (status.isOverdue) {
         return <RiCloseLine className={`text-red-500 ${sizeClass}`} />;
-    }
-    
-    if (status.isToday) {
-        return <RiTimeLine className={`text-blue-500 ${sizeClass}`} />;
     }
     
     return <RiTimeLine className={`text-yellow-500 ${sizeClass}`} />;
