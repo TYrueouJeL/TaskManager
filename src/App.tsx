@@ -68,7 +68,7 @@ function App() {
 
                 {/* Mobile Navigation */}
                 {menuOpen && (
-                    <nav className="md:hidden bg-background border-t border-muted px-4 py-3 animate-slide-down">
+                    <nav className="md:hidden bg-transparent border-t border-muted px-4 py-3 animate-slide-down">
                         <ul className="flex flex-col gap-3">
                             <li>
                                 <Link
