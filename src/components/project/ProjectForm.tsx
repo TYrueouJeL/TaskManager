@@ -46,38 +46,38 @@ export default function ProjectForm({ mode, project }: ProjectFormProps) {
 
     return (
         <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
-        <Card>
-            <CardHeader>
-                <CardTitle>{isEdit ? "Modifier le projet" : "Créer un projet"}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-    <div>
-        <label htmlFor="title" className="block mb-1 font-medium text-sm">Titre</label>
-        <Input
-    id="title"
-    value={title}
-    onChange={(e) => setTitle(e.target.value)}
-    required
-    />
-    </div>
+            <Card>
+                <CardHeader>
+                    <CardTitle>{isEdit ? "Modifier le projet" : "Créer un projet"}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div>
+                        <label htmlFor="title" className="block mb-1 font-medium text-sm">Titre</label>
+                        <Input
+                            id="title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            required
+                        />
+                    </div>
 
-    <div>
-    <label htmlFor="description" className="block mb-1 font-medium text-sm">Description</label>
-        <Textarea
-    id="description"
-    value={description}
-    onChange={(e) => setDescription(e.target.value)}
-    rows={5}
-    />
-    </div>
+                    <div>
+                        <label htmlFor="description" className="block mb-1 font-medium text-sm">Description</label>
+                        <Textarea
+                            id="description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            rows={5}
+                        />
+                    </div>
 
-    {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+                    {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
 
-        <Button type="submit" disabled={loading}>
-        {loading ? (isEdit ? "Enregistrement…" : "Création…") : (isEdit ? "Enregistrer" : "Créer le projet")}
-        </Button>
-        </CardContent>
-        </Card>
+                    <Button type="submit" disabled={loading}>
+                        {loading ? (isEdit ? "Enregistrement…" : "Création…") : (isEdit ? "Enregistrer" : "Créer le projet")}
+                    </Button>
+                </CardContent>
+            </Card>
         </form>
     );
     }
