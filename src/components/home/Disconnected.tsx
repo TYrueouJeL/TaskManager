@@ -79,7 +79,7 @@ export default function Home() {
                     Prêt à booster votre productivité ?
                 </h2>
                 <p className="disconnected-cta-description">
-                    Rejoignez des centaines d’utilisateurs qui gèrent mieux leur quotidien grâce à notre application.
+                    Rejoignez le seul utilisateur qui gère mieux son quotidien grâce à notre application.
                 </p>
                 <Link to="/login" className="disconnected-cta-button">
                     <RiRocketLine /> S’inscrire gratuitement
