@@ -5,10 +5,16 @@ import { Link } from "react-router";
 
 export default function TaskList({ tasks }) {
     const [search, setSearch] = useState({ title: "" });
+    
+    // Date de début à -2 jours par défaut
+    const defaultStartDate = new Date();
+    defaultStartDate.setDate(defaultStartDate.getDate() - 2);
+    const formattedStartDate = defaultStartDate.toISOString().split('T')[0];
+    
     const [filters, setFilters] = useState({
         hideCompleted: false,
         hideDaily: true,
-        startDate: "",
+        startDate: formattedStartDate,
         endDate: "",
         projectFilter: "all" // all | with | without
     });
